@@ -40,7 +40,7 @@ export default function Home() {
           </div>
 
           <div className="card">
-            <h3>Test Orders</h3>
+            <h3>LAB Test Orders</h3>
             <p>Create, update, prioritize, and track orders.</p>
           </div>
 

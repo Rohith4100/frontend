@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import styles from "./login.module.css";
 
 export default function Login() {
   const router = useRouter();
@@ -14,51 +15,40 @@ export default function Login() {
 
   const validate = () => {
     const newErrors = {};
-
     if (!email.trim()) {
       newErrors.email = "Email is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = "Please enter a valid email address.";
     }
-
     if (!password) {
       newErrors.password = "Password is required.";
     } else if (password.length < 4) {
       newErrors.password = "Password must be at least 6 characters.";
     }
-
     return newErrors;
   };
 
   const handleLogin = async () => {
     setLoginError("");
     const validationErrors = validate();
-
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
     setErrors({});
     setIsLoading(true);
-
     try {
       const response = await fetch("http://127.0.0.1:8000/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         setLoginError(errorData.message || "Invalid email or password.");
         return;
       }
-
       const data = await response.json();
-
       const roleRoutes = {
         Receptionist: "/receptionist",
         "Lab Technician": "/lab-technician",
@@ -66,7 +56,6 @@ export default function Login() {
         Physician: "/physician",
         Admin: "/admin",
       };
-
       if (roleRoutes[data.role]) {
         router.push(roleRoutes[data.role]);
       } else {
@@ -80,61 +69,80 @@ export default function Login() {
   };
 
   return (
-    <div className="loginPage">
-      <div className="backgroundCircle"></div>
-      <div className="backgroundCircle2"></div>
+    <div className={styles.loginPage}>
+      <div className={styles.backgroundCircle}></div>
+      <div className={styles.backgroundCircle2}></div>
 
-      <div className="loginCard">
+      <div className={styles.loginCard}>
         <img
           src="/CrenueLab.png"
           alt="CrenueLab Logo"
-          className="logo"
-          height="350px"
-          width="500px"
+          className={styles.logo}
         />
 
-        <h1>Welcome Back</h1>
-        <p className="subtitle">Sign in to access CrenueLab</p>
+        <div className={styles.divider}></div>
+
+        <h1 className={styles.heading}>Welcome Back</h1>
+        <p className={styles.subtitle}>Sign in to access CrenueLab</p>
 
         {loginError && (
-          <div className="errorBanner">
+          <div className={styles.errorBanner}>
+            <span className={styles.errorIcon}>⚠</span>
             {loginError}
           </div>
         )}
 
-        <div className="field">
-          <label>Email Address</label>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
-            }}
-            className={errors.email ? "inputError" : ""}
-          />
-          {errors.email && <span className="errorText">{errors.email}</span>}
+        <div className={styles.field}>
+          <label className={styles.label}>Email Address</label>
+          <div className={styles.inputWrapper}>
+            <span className={styles.inputIcon}>✉</span>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+              }}
+              className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
+            />
+          </div>
+          {errors.email && <span className={styles.errorText}>{errors.email}</span>}
         </div>
 
-        <div className="field">
-          <label>Password</label>
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
-            }}
-            className={errors.password ? "inputError" : ""}
-          />
-          {errors.password && <span className="errorText">{errors.password}</span>}
+        <div className={styles.field}>
+          <label className={styles.label}>Password</label>
+          <div className={styles.inputWrapper}>
+            <span className={styles.inputIcon}>🔒</span>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
+              }}
+              className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
+            />
+          </div>
+          {errors.password && <span className={styles.errorText}>{errors.password}</span>}
         </div>
 
-        <button onClick={handleLogin} disabled={isLoading}>
-          {isLoading ? "Logging in..." : "Login"}
+        <button
+          className={`${styles.loginBtn} ${isLoading ? styles.loading : ""}`}
+          onClick={handleLogin}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <span className={styles.spinner}></span>
+          ) : (
+            "Login"
+          )}
         </button>
+
+        <p className={styles.footer}>
+          © 2025 CrenueLab · Life Science Analysis
+        </p>
       </div>
     </div>
   );
