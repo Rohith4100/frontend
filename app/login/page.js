@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./login.module.css";
+import { apiFetch } from "@/utils/api";
 
 export default function Login() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function Login() {
     if (!password) {
       newErrors.password = "Password is required.";
     } else if (password.length < 4) {
-      newErrors.password = "Password must be at least 6 characters.";
+      newErrors.password = "Password must be at least 4 characters.";
     }
     return newErrors;
   };
@@ -38,7 +39,7 @@ export default function Login() {
     setErrors({});
     setIsLoading(true);
     try {
-      const response = await fetch("http://127.0.0.1:8000/login", {
+      const response = await apiFetch("http://127.0.0.1:8000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -49,6 +50,21 @@ export default function Login() {
         return;
       }
       const data = await response.json();
+      localStorage.setItem(
+        "token",
+        data.access_token
+      );
+
+      localStorage.setItem(
+        "role",
+        data.role
+      );
+
+      localStorage.setItem(
+        "name",
+        data.name
+      );
+
       const roleRoutes = {
         Receptionist: "/receptionist",
         "Lab Technician": "/lab-technician",
@@ -141,7 +157,7 @@ export default function Login() {
         </button>
 
         <p className={styles.footer}>
-          © 2025 CrenueLab · Life Science Analysis
+          © 2026 CrenueLab · Life Science Analysis
         </p>
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import { apiFetch } from "@/utils/api";
 export default function ManagePatients() {
   const [patients, setPatients] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -21,9 +21,7 @@ export default function ManagePatients() {
 
   const fetchPatients = async () => {
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/patients"
-      );
+      const response = await apiFetch("http://127.0.0.1:8000/patients");
 
       const data = await response.json();
 
@@ -49,17 +47,15 @@ export default function ManagePatients() {
 
   const addPatient = async () => {
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/patients",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...patient,
-            age: Number(patient.age),
-          }),
+      const response = await apiFetch("http://127.0.0.1:8000/patients", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...patient,
+          age: Number(patient.age),
+        }),
         }
       );
 
@@ -75,7 +71,7 @@ export default function ManagePatients() {
 
   const updatePatient = async () => {
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         `http://127.0.0.1:8000/patients/${editingId}`,
         {
           method: "PATCH",
@@ -110,12 +106,9 @@ export default function ManagePatients() {
     if (!confirmDelete) return;
 
     try {
-      await fetch(
-        `http://127.0.0.1:8000/patients/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      await apiFetch(`http://127.0.0.1:8000/patients/${id}`, {
+        method: "DELETE",
+      });
 
       alert("Patient Deleted");
 
