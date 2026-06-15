@@ -1,4 +1,4 @@
-import ManagePatients from "../../manage-patients/page";
+import ManagePatients from "@/components/manage-patients";
 export default function ReceptionistManagePatients() {
   return (
     <>

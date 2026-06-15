@@ -1,5 +1,5 @@
 "use client";
-
+import styles from "@/components/manage.module.css";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/utils/api";
 export default function ManagePatients() {
@@ -10,7 +10,7 @@ export default function ManagePatients() {
   const [patient, setPatient] = useState({
     name: "",
     age: "",
-    gender: "",
+    gender: "Male",
     phone: "",
     address: "",
   });
@@ -39,7 +39,7 @@ export default function ManagePatients() {
     setPatient({
       name: "",
       age: "",
-      gender: "",
+      gender: "Male",
       phone: "",
       address: "",
     });
@@ -147,218 +147,231 @@ export default function ManagePatients() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      {selectedPatient ? (
-        <>
-          <h1>Patient Details</h1>
+  <div className={styles.container}>
+    {selectedPatient ? (
+      <div className={styles.card}>
+        <h1 className={styles.title}>Patient Details</h1>
 
-          <p>
-            <strong>ID:</strong>{" "}
-            {selectedPatient.id}
-          </p>
+        <div className={styles.patientCard}>
+          <div className={styles.infoBox}>
+            <div className={styles.infoLabel}>ID</div>
+            <div className={styles.infoValue}>{selectedPatient.id}</div>
+          </div>
 
-          <p>
-            <strong>Name:</strong>{" "}
-            {selectedPatient.name}
-          </p>
+          <div className={styles.infoBox}>
+            <div className={styles.infoLabel}>Name</div>
+            <div className={styles.infoValue}>{selectedPatient.name}</div>
+          </div>
 
-          <p>
-            <strong>Age:</strong>{" "}
-            {selectedPatient.age}
-          </p>
+          <div className={styles.infoBox}>
+            <div className={styles.infoLabel}>Age</div>
+            <div className={styles.infoValue}>{selectedPatient.age}</div>
+          </div>
 
-          <p>
-            <strong>Gender:</strong>{" "}
-            {selectedPatient.gender}
-          </p>
+          <div className={styles.infoBox}>
+            <div className={styles.infoLabel}>Gender</div>
+            <div className={styles.infoValue}>{selectedPatient.gender}</div>
+          </div>
 
-          <p>
-            <strong>Phone:</strong>{" "}
-            {selectedPatient.phone}
-          </p>
+          <div className={styles.infoBox}>
+            <div className={styles.infoLabel}>Phone</div>
+            <div className={styles.infoValue}>{selectedPatient.phone}</div>
+          </div>
 
-          <p>
-            <strong>Address:</strong>{" "}
-            {selectedPatient.address}
-          </p>
+          <div className={styles.infoBox}>
+            <div className={styles.infoLabel}>Address</div>
+            <div className={styles.infoValue}>{selectedPatient.address}</div>
+          </div>
+        </div>
 
-          <button
-            onClick={() =>
-              setSelectedPatient(null)
-            }
-          >
-            Close
-          </button>
-        </>
-      ) : (
-        <>
-          <h1>Manage Patients</h1>
+        <br />
 
-          <h2>
-            {editingId
-              ? "Update Patient"
-              : "Add Patient"}
+        <button
+          className={styles.button}
+          onClick={() => setSelectedPatient(null)}
+        >
+          Close
+        </button>
+      </div>
+    ) : (
+      <>
+        <h1 className={styles.title}>Manage Patients</h1>
+
+        <div className={styles.card}>
+          <h2 className={styles.sectionTitle}>
+            {editingId ? "Update Patient" : "Add Patient"}
           </h2>
 
-          <input
-            placeholder="Name"
-            value={patient.name}
-            onChange={(e) =>
-              setPatient({
-                ...patient,
-                name: e.target.value,
-              })
-            }
-          />
+          <div className={styles.form}>
+            <input
+              className={styles.input}
+              placeholder="Patient Name"
+              value={patient.name}
+              onChange={(e) =>
+                setPatient({
+                  ...patient,
+                  name: e.target.value,
+                })
+              }
+            />
 
-          <br /><br />
+            <input
+              className={styles.input}
+              type="number"
+              placeholder="Age"
+              value={patient.age}
+              onChange={(e) =>
+                setPatient({
+                  ...patient,
+                  age: e.target.value,
+                })
+              }
+            />
 
-          <input
-            placeholder="Age"
-            value={patient.age}
-            onChange={(e) =>
-              setPatient({
-                ...patient,
-                age: e.target.value,
-              })
-            }
-          />
+           <select
+              className={styles.select}
+              value={patient.gender}
+              onChange={(e) =>
+                setPatient({
+                  ...patient,
+                  gender: e.target.value,
+                })
+              }
+            >
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
 
-          <br /><br />
+            <input
+              className={styles.input}
+              placeholder="Phone"
+              value={patient.phone}
+              onChange={(e) =>
+                setPatient({
+                  ...patient,
+                  phone: e.target.value,
+                })
+              }
+            />
 
-          <input
-            placeholder="Gender"
-            value={patient.gender}
-            onChange={(e) =>
-              setPatient({
-                ...patient,
-                gender: e.target.value,
-              })
-            }
-          />
+            <input
+              className={styles.input}
+              placeholder="Address"
+              value={patient.address}
+              onChange={(e) =>
+                setPatient({
+                  ...patient,
+                  address: e.target.value,
+                })
+              }
+            />
+          </div>
 
-          <br /><br />
-
-          <input
-            placeholder="Phone"
-            value={patient.phone}
-            onChange={(e) =>
-              setPatient({
-                ...patient,
-                phone: e.target.value,
-              })
-            }
-          />
-
-          <br /><br />
-
-          <input
-            placeholder="Address"
-            value={patient.address}
-            onChange={(e) =>
-              setPatient({
-                ...patient,
-                address: e.target.value,
-              })
-            }
-          />
-
-          <br /><br />
+          <br />
 
           {editingId ? (
             <>
-              <button onClick={updatePatient}>
+              <button
+                className={styles.button}
+                onClick={updatePatient}
+              >
                 Update Patient
               </button>
 
               <button
+                className={styles.deleteBtn}
                 onClick={resetForm}
-                style={{
-                  marginLeft: "10px",
-                }}
+                style={{ marginLeft: "10px" }}
               >
                 Cancel
               </button>
             </>
           ) : (
-            <button onClick={addPatient}>
+            <button
+              className={styles.button}
+              onClick={addPatient}
+            >
               Add Patient
             </button>
           )}
+        </div>
 
-          <hr
+        <div className={styles.card}>
+          <div
             style={{
-              marginTop: "30px",
-              marginBottom: "30px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "20px",
             }}
-          />
+          >
+            <h2 className={styles.sectionTitle}>
+              Patients List
+            </h2>
 
-          <h2>Patients List</h2>
+            <button
+              className={styles.refreshBtn}
+              onClick={fetchPatients}
+            >
+              Refresh
+            </button>
+          </div>
 
-          <button onClick={fetchPatients}>
-            Refresh
-          </button>
-
-          <br /><br />
-
-          <table border="1" cellPadding="10">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Gender</th>
-                <th>Phone</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {patients.map((patient) => (
-                <tr key={patient.id}>
-                  <td>{patient.id}</td>
-                  <td>{patient.name}</td>
-                  <td>{patient.age}</td>
-                  <td>{patient.gender}</td>
-                  <td>{patient.phone}</td>
-
-                  <td>
-                    <button
-                      onClick={() =>
-                        viewPatient(patient)
-                      }
-                    >
-                      View
-                    </button>
-
-                    <button
-                      onClick={() =>
-                        editPatient(patient)
-                      }
-                      style={{
-                        marginLeft: "10px",
-                      }}
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() =>
-                        deletePatient(patient.id)
-                      }
-                      style={{
-                        marginLeft: "10px",
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </td>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                  <th>Phone</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
-      )}
-    </div>
-  );
+              </thead>
+
+              <tbody>
+                {patients.map((patient) => (
+                  <tr key={patient.id}>
+                    <td>{patient.id}</td>
+                    <td>{patient.name}</td>
+                    <td>{patient.age}</td>
+                    <td>{patient.gender}</td>
+                    <td>{patient.phone}</td>
+
+                    <td>
+                      <div className={styles.actions}>
+                        <button
+                          className={styles.viewBtn}
+                          onClick={() => viewPatient(patient)}
+                        >
+                          View
+                        </button>
+
+                        <button
+                          className={styles.editBtn}
+                          onClick={() => editPatient(patient)}
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          className={styles.deleteBtn}
+                          onClick={() => deletePatient(patient.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </>
+    )}
+  </div>
+);
 }

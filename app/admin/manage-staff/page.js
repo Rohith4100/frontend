@@ -1,5 +1,5 @@
 "use client";
-
+import styles from "@/components/manage.module.css";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/utils/api";
 export default function ManageStaff() {
@@ -11,6 +11,7 @@ export default function ManageStaff() {
     name: "",
     email: "",
     password: "",
+    confirm_Password: "",
     role: "Receptionist",
   });
 
@@ -39,11 +40,65 @@ export default function ManageStaff() {
       name: "",
       email: "",
       password: "",
+      confirm_Password: "",
       role: "Receptionist",
     });
   };
+  const validateForm = () => {
+    if (!form.name.trim()) {
+      alert("Name is required");
+      return false;
+    }
+
+    if (form.name.trim().length < 3) {
+      alert("Name must be at least 3 characters");
+      return false;
+    }
+
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(form.email)) {
+      alert("Enter a valid email address");
+      return false;
+    }
+
+    if (!editingId) {
+      if (!form.password) {
+        alert("Password is required");
+        return false;
+      }
+
+      if (form.password.length < 6) {
+        alert("Password must be at least 6 characters");
+        return false;
+      }
+
+      if (form.password !== form.confirm_Password) {
+        alert("Passwords do not match");
+        return false;
+      }
+    }
+
+    if (editingId && form.password) {
+      if (form.password.length < 6) {
+        alert("Password must be at least 6 characters");
+        return false;
+      }
+
+      if (form.password !== form.confirm_Password) {
+        alert("Passwords do not match");
+        return false;
+      }
+    }
+
+    return true;
+  };
 
   const createStaff = async () => {
+    if (!validateForm()) {
+      return;
+    }
     try {
       const response = await apiFetch("http://127.0.0.1:8000/signup", {
         method: "POST",
@@ -67,6 +122,10 @@ export default function ManageStaff() {
   };
 
   const updateStaff = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       const response = await apiFetch(
         `http://127.0.0.1:8000/staffs/${editingId}`,
@@ -123,6 +182,7 @@ export default function ManageStaff() {
       name: staff.name,
       email: staff.email,
       password: "",
+      confirm_Password: "",
       role: staff.role,
     });
 
@@ -142,221 +202,235 @@ export default function ManageStaff() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className={styles.container}>
       {selectedStaff ? (
-        <>
-          <h1>Staff Details</h1>
+        <div className={styles.card}>
+          <h1 className={styles.title}>Staff Details</h1>
 
-          <p>
-            <strong>ID:</strong>{" "}
-            {selectedStaff.id}
-          </p>
+          <div className={styles.patientCard}>
+            <div className={styles.infoBox}>
+              <p className={styles.infoLabel}>ID</p>
+              <p className={styles.infoValue}>{selectedStaff.id}</p>
+            </div>
 
-          <p>
-            <strong>Name:</strong>{" "}
-            {selectedStaff.name}
-          </p>
+            <div className={styles.infoBox}>
+              <p className={styles.infoLabel}>Name</p>
+              <p className={styles.infoValue}>{selectedStaff.name}</p>
+            </div>
 
-          <p>
-            <strong>Email:</strong>{" "}
-            {selectedStaff.email}
-          </p>
+            <div className={styles.infoBox}>
+              <p className={styles.infoLabel}>Email</p>
+              <p className={styles.infoValue}>{selectedStaff.email}</p>
+            </div>
 
-          <p>
-            <strong>Role:</strong>{" "}
-            {selectedStaff.role}
-          </p>
+            <div className={styles.infoBox}>
+              <p className={styles.infoLabel}>Role</p>
+              <p className={styles.infoValue}>{selectedStaff.role}</p>
+            </div>
+          </div>
+
+          <br />
 
           <button
-            onClick={() =>
-              setSelectedStaff(null)
-            }
+            className={styles.button}
+            onClick={() => setSelectedStaff(null)}
           >
             Close
           </button>
-        </>
+        </div>
       ) : (
         <>
-          <h1>Manage Staff</h1>
+          <h1 className={styles.title}>Manage Staff</h1>
 
-          <h2>
-            {editingId
-              ? "Update Staff"
-              : "Add Staff"}
-          </h2>
+          <div className={styles.card}>
+            <h2 className={styles.sectionTitle}>
+              {editingId ? "Update Staff" : "Add Staff"}
+            </h2>
 
-          <input
-            placeholder="Name"
-            value={form.name}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                name: e.target.value,
-              })
-            }
-          />
+            <div className={styles.form}>
+              <input
+                className={styles.input}
+                placeholder="Name"
+                value={form.name}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    name: e.target.value,
+                  })
+                }
+              />
 
-          <br /><br />
+              <input
+                className={styles.input}
+                type="email"
+                placeholder="Email"
+                value={form.email}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    email: e.target.value,
+                  })
+                }
+              />
 
-          <input
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                email: e.target.value,
-              })
-            }
-          />
+              <input
+                className={styles.input}
+                type="password"
+                placeholder="Password"
+                value={form.password}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    password: e.target.value,
+                  })
+                }
+              />
 
-          <br /><br />
+              <input
+                className={styles.input}
+                type="password"
+                placeholder="Confirm Password"
+                value={form.confirm_Password}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    confirm_Password: e.target.value,
+                  })
+                }
+              />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                password: e.target.value,
-              })
-            }
-          />
-
-          <br /><br />
-
-          <select
-            value={form.role}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                role: e.target.value,
-              })
-            }
-          >
-            <option>
-              Receptionist
-            </option>
-            <option>
-              Lab Technician
-            </option>
-            <option>
-              Pathologist
-            </option>
-            <option>
-              Physician
-            </option>
-            <option>
-              Admin
-            </option>
-          </select>
-
-          <br /><br />
-
-          {editingId ? (
-            <>
-              <button
-                onClick={updateStaff}
+              <select
+                className={styles.select}
+                value={form.role}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    role: e.target.value,
+                  })
+                }
               >
-                Update Staff
-              </button>
+                <option>Receptionist</option>
+                <option>Lab Technician</option>
+                <option>Pathologist</option>
+                <option>Physician</option>
+                <option>Admin</option>
+              </select>
+            </div>
 
+            <br />
+
+            {editingId ? (
+              <>
+                <button
+                  className={styles.button}
+                  onClick={updateStaff}
+                >
+                  Update Staff
+                </button>
+
+                <button
+                  className={styles.deleteBtn}
+                  onClick={resetForm}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
               <button
-                onClick={resetForm}
-                style={{
-                  marginLeft: "10px",
-                }}
+                className={styles.button}
+                onClick={createStaff}
+                disabled={
+                  !form.name.trim() ||
+                  !form.email.trim() ||
+                  !form.password.trim() ||
+                  !form.confirm_Password.trim()
+                }
               >
-                Cancel
+                Add Staff
               </button>
-            </>
-          ) : (
-            <button
-              onClick={createStaff}
+            )}
+          </div>
+
+          <div className={styles.card}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "20px",
+              }}
             >
-              Add Staff
-            </button>
-          )}
+              <h2 className={styles.sectionTitle}>
+                Staff List
+              </h2>
 
-          <hr
-            style={{
-              marginTop: "30px",
-              marginBottom: "30px",
-            }}
-          />
+              <button
+                className={styles.refreshBtn}
+                onClick={fetchStaffs}
+              >
+                Refresh
+              </button>
+            </div>
 
-          <h2>Staff List</h2>
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
 
-          <button
-            onClick={fetchStaffs}
-          >
-            Refresh
-          </button>
+                <tbody>
+                  {staffs.map((staff) => (
+                    <tr key={staff.id}>
+                      <td>{staff.id}</td>
+                      <td>{staff.name}</td>
+                      <td>{staff.email}</td>
+                      <td>{staff.role}</td>
 
-          <br /><br />
+                      <td>
+                        <div className={styles.actions}>
+                          <button
+                            className={styles.viewBtn}
+                            onClick={() =>
+                              viewStaff(staff)
+                            }
+                          >
+                            View
+                          </button>
 
-          <table
-            border="1"
-            cellPadding="10"
-          >
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
+                          <button
+                            className={styles.editBtn}
+                            onClick={() =>
+                              editStaff(staff)
+                            }
+                          >
+                            Edit
+                          </button>
 
-            <tbody>
-              {staffs.map((staff) => (
-                <tr key={staff.id}>
-                  <td>{staff.id}</td>
-                  <td>{staff.name}</td>
-                  <td>{staff.email}</td>
-                  <td>{staff.role}</td>
-
-                  <td>
-                    <button
-                      onClick={() =>
-                        viewStaff(staff)
-                      }
-                    >
-                      View
-                    </button>
-
-                    <button
-                      onClick={() =>
-                        editStaff(staff)
-                      }
-                      style={{
-                        marginLeft:
-                          "10px",
-                      }}
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() =>
-                        deleteStaff(
-                          staff.id
-                        )
-                      }
-                      style={{
-                        marginLeft:
-                          "10px",
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                          <button
+                            className={styles.deleteBtn}
+                            onClick={() =>
+                              deleteStaff(
+                                staff.id
+                              )
+                            }
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </>
       )}
     </div>
