@@ -1,4 +1,24 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 export default function Admin() {
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const token =
+      localStorage.getItem("token");
+
+    const role =
+      localStorage.getItem("role");
+
+    if (!token || role !== "Admin") {
+      router.push("/login");
+    }
+  }, []);
+
   return (
     <>
       <h1>Admin Dashboard</h1>

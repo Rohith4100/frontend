@@ -14,8 +14,8 @@ export default function LabTechnicianLayout({ children }) {
   };
 
   return (
-     <DashboardLayout>
-       {children}
-     </DashboardLayout>
-   );
+    <DashboardLayout>
+      {children}
+    </DashboardLayout>
+  );
 }

@@ -34,7 +34,7 @@ export default function Sidebar() {
       },
       {
         label: "Manage Patients",
-        path: "/manage-patients",
+        path: "/admin/manage-patients",
       },
     ],
 
@@ -45,7 +45,7 @@ export default function Sidebar() {
       },
       {
         label: "Manage Patients",
-        path: "/manage-patients",
+        path: "/receptionist/manage-patients",
       },
     ],
 
