@@ -14,7 +14,7 @@ export default function Admin() {
     const role =
       localStorage.getItem("role");
 
-    if (!token || role !== "Admin") {
+    if (!token || role !== "Administrator") {
       router.push("/login");
     }
   }, []);

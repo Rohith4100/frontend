@@ -8,11 +8,14 @@ export default function ManageStaff() {
   const [selectedStaff, setSelectedStaff] = useState(null);
 
   const [form, setForm] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     confirm_Password: "",
     role: "Receptionist",
+    phone: "",
+    address: ""
   });
 
   useEffect(() => {
@@ -21,7 +24,7 @@ export default function ManageStaff() {
 
   const fetchStaffs = async () => {
     try {
-      const response = await apiFetch("http://127.0.0.1:8000/staffs");
+      const response = await apiFetch("http://127.0.0.1:8000/staffs/");
 
       const data = await response.json();
 
@@ -37,21 +40,29 @@ export default function ManageStaff() {
     setEditingId(null);
 
     setForm({
-      name: "",
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
       confirm_Password: "",
       role: "Receptionist",
+      phone: "",
+      address: ""
     });
   };
   const validateForm = () => {
-    if (!form.name.trim()) {
-      alert("Name is required");
+    if (!form.first_name.trim()) {
+      alert("First Name is required");
       return false;
     }
 
-    if (form.name.trim().length < 3) {
-      alert("Name must be at least 3 characters");
+    if (!form.last_name.trim()) {
+      alert("Last Name is required");
+      return false;
+    }
+
+    if (form.first_name.trim().length < 3) {
+      alert("First Name must be at least 3 characters");
       return false;
     }
 
@@ -60,6 +71,21 @@ export default function ManageStaff() {
 
     if (!emailRegex.test(form.email)) {
       alert("Enter a valid email address");
+      return false;
+    }
+
+    if (!/^\d{10}$/.test(form.phone)) {
+      alert("Phone Number must be 10 digits");
+      return false;
+    }
+
+    if (form.phone.length !== 10) {
+      alert("Phone Number must be 10 digits");
+      return false;
+    }
+
+    if (!form.address.trim()) {
+      alert("Address is required");
       return false;
     }
 
@@ -74,19 +100,10 @@ export default function ManageStaff() {
         return false;
       }
 
-      if (form.password !== form.confirm_Password) {
-        alert("Passwords do not match");
-        return false;
-      }
-    }
-
-    if (editingId && form.password) {
-      if (form.password.length < 6) {
-        alert("Password must be at least 6 characters");
-        return false;
-      }
-
-      if (form.password !== form.confirm_Password) {
+      if (
+        form.password !==
+        form.confirm_Password
+      ) {
         alert("Passwords do not match");
         return false;
       }
@@ -94,7 +111,6 @@ export default function ManageStaff() {
 
     return true;
   };
-
   const createStaff = async () => {
     if (!validateForm()) {
       return;
@@ -127,6 +143,17 @@ export default function ManageStaff() {
     }
 
     try {
+      const payload = {
+        first_name: form.first_name,
+        last_name: form.last_name,
+        email: form.email,
+        role: form.role,
+        phone: form.phone,
+        address: form.address,
+      };
+      if(form.password.trim()){
+        payload.password=form.password
+      }
       const response = await apiFetch(
         `http://127.0.0.1:8000/staffs/${editingId}`,
         {
@@ -135,13 +162,13 @@ export default function ManageStaff() {
             "Content-Type":
               "application/json",
           },
-          body: JSON.stringify(form),
+          body: JSON.stringify(payload),
         }
       );
 
       const data = await response.json();
 
-      alert(data.message);
+      alert("Staff Updated Succesfully");
 
       resetForm();
 
@@ -179,11 +206,14 @@ export default function ManageStaff() {
     setEditingId(staff.id);
 
     setForm({
-      name: staff.name,
+      first_name: staff.first_name,
+      last_name: staff.last_name,
       email: staff.email,
       password: "",
       confirm_Password: "",
       role: staff.role,
+      phone: staff.phone,
+      address: staff.address
     });
 
     window.scrollTo({
@@ -214,8 +244,12 @@ export default function ManageStaff() {
             </div>
 
             <div className={styles.infoBox}>
-              <p className={styles.infoLabel}>Name</p>
-              <p className={styles.infoValue}>{selectedStaff.name}</p>
+              <p className={styles.infoLabel}>First Name</p>
+              <p className={styles.infoValue}>{selectedStaff.first_name}</p>
+            </div>
+            <div className={styles.infoBox}>
+              <p className={styles.infoLabel}>Last Name</p>
+              <p className={styles.infoValue}>{selectedStaff.last_name}</p>
             </div>
 
             <div className={styles.infoBox}>
@@ -226,6 +260,14 @@ export default function ManageStaff() {
             <div className={styles.infoBox}>
               <p className={styles.infoLabel}>Role</p>
               <p className={styles.infoValue}>{selectedStaff.role}</p>
+            </div>
+            <div className={styles.infoBox}>
+              <p className={styles.infoLabel}>Phone Number</p>
+              <p className={styles.infoValue}>{selectedStaff.phone}</p>
+            </div>
+            <div className={styles.infoBox}>
+              <p className={styles.infoLabel}>Address</p>
+              <p className={styles.infoValue}>{selectedStaff.address}</p>
             </div>
           </div>
 
@@ -250,12 +292,23 @@ export default function ManageStaff() {
             <div className={styles.form}>
               <input
                 className={styles.input}
-                placeholder="Name"
-                value={form.name}
+                placeholder="first-name"
+                value={form.first_name}
                 onChange={(e) =>
                   setForm({
                     ...form,
-                    name: e.target.value,
+                    first_name: e.target.value,
+                  })
+                }
+              />
+              <input
+                className={styles.input}
+                placeholder="last-name"
+                value={form.last_name}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    last_name: e.target.value,
                   })
                 }
               />
@@ -315,6 +368,31 @@ export default function ManageStaff() {
                 <option>Physician</option>
                 <option>Admin</option>
               </select>
+              <input
+                className={styles.input}
+                type="text"
+                placeholder="Phone no."
+                value={form.phone}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    phone: e.target.value,
+                  })
+                }
+              />
+
+              <input
+                className={styles.input}
+                type="text"
+                placeholder="Address"
+                value={form.address}
+                onChange={(e) => {
+                  setForm({
+                    ...form,
+                    address: e.target.value,
+                  });
+                }}
+              />
             </div>
 
             <br />
@@ -341,10 +419,13 @@ export default function ManageStaff() {
                 className={styles.button}
                 onClick={createStaff}
                 disabled={
-                  !form.name.trim() ||
+                  !form.first_name.trim() ||
+                  !form.last_name.trim() ||
                   !form.email.trim() ||
                   !form.password.trim() ||
-                  !form.confirm_Password.trim()
+                  !form.confirm_Password.trim() ||
+                  !form.phone.trim() ||
+                  !form.address.trim()
                 }
               >
                 Add Staff
@@ -389,7 +470,7 @@ export default function ManageStaff() {
                   {staffs.map((staff) => (
                     <tr key={staff.id}>
                       <td>{staff.id}</td>
-                      <td>{staff.name}</td>
+                      <td>{staff.first_name} {staff.last_name}</td>
                       <td>{staff.email}</td>
                       <td>{staff.role}</td>
 

@@ -62,7 +62,7 @@ export default function Login() {
 
       localStorage.setItem(
         "name",
-        data.name
+        data.user.first_name + data.user.last_name
       );
 
       const roleRoutes = {
@@ -70,7 +70,7 @@ export default function Login() {
         "Lab Technician": "/lab-technician",
         Pathologist: "/pathologist",
         Physician: "/physician",
-        Admin: "/admin",
+        Administrator: "/admin",
       };
       if (roleRoutes[data.role]) {
         router.push(roleRoutes[data.role]);
@@ -78,6 +78,7 @@ export default function Login() {
         setLoginError("Unrecognized role. Please contact support.");
       }
     } catch (error) {
+      alert(error);
       setLoginError("Unable to connect to the server. Please try again.");
     } finally {
       setIsLoading(false);

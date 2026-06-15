@@ -23,7 +23,7 @@ export default function Sidebar() {
   };
 
   const menus = {
-    Admin: [
+    Administrator: [
       {
         label: "Dashboard",
         path: "/admin",
@@ -36,6 +36,10 @@ export default function Sidebar() {
         label: "Manage Patients",
         path: "/admin/manage-patients",
       },
+      {
+        label: "Manage catalog",
+        path: "/admin/catalog"
+      }
     ],
 
     Receptionist: [
