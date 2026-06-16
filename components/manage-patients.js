@@ -2,6 +2,7 @@
 import styles from "@/components/manage.module.css";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/utils/api";
+import { API_BASE } from "../utils/constants";
 export default function ManagePatients() {
   const [patients, setPatients] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -24,7 +25,7 @@ export default function ManagePatients() {
 
   const fetchPatients = async () => {
     try {
-      const response = await apiFetch("http://127.0.0.1:8000/patients");
+      const response = await apiFetch(`${API_BASE}/patients/`);
 
       const data = await response.json();
 
@@ -53,7 +54,7 @@ export default function ManagePatients() {
 
   const addPatient = async () => {
     try {
-      const response = await apiFetch("http://127.0.0.1:8000/patients", {
+      const response = await apiFetch(`${API_BASE}/patients`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +78,7 @@ export default function ManagePatients() {
   const updatePatient = async () => {
     try {
       const response = await apiFetch(
-        `http://127.0.0.1:8000/patients/${editingId}`,
+        `${API_BASE}/patients/${editingId}`,
         {
           method: "PATCH",
           headers: {
@@ -110,7 +111,7 @@ export default function ManagePatients() {
     if (!confirmDelete) return;
 
     try {
-      await apiFetch(`http://127.0.0.1:8000/patients/${id}`, {
+      await apiFetch(`${API_BASE}/patients/${id}`, {
         method: "DELETE",
       });
 

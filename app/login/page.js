@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./login.module.css";
 import { apiFetch } from "@/utils/api";
+import { API_BASE } from "../../utils/constants";
 
 export default function Login() {
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function Login() {
     setErrors({});
     setIsLoading(true);
     try {
-      const response = await apiFetch("http://127.0.0.1:8000/login", {
+      const response = await apiFetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -62,7 +63,7 @@ export default function Login() {
 
       localStorage.setItem(
         "name",
-        data.user.first_name + data.user.last_name
+        data.user.first_name + " " + data.user.last_name
       );
 
       const roleRoutes = {

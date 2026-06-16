@@ -1,13 +1,12 @@
 "use client";
 
-import ManageCatalog from "@/components/manage-catalog";
 import ProtectedRoute from "../../../components/protectedRoute";
+import ManageTestParameters from "@/components/manage-test-parameters";
 
-export default function AdminCatalog() {
-
+export default function TestParametersPage() {
   return (
     <ProtectedRoute role="Administrator">
-      <ManageCatalog />
+      <ManageTestParameters />
     </ProtectedRoute>
   );
 }

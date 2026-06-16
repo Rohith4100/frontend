@@ -39,7 +39,20 @@ export default function Sidebar() {
       {
         label: "Manage catalog",
         path: "/admin/catalog"
+      },
+      {
+        label: "Test Parameters",
+        path: "/admin/test-parameters"
+      },
+      {
+        label: "Orders",
+        path: "/admin/order"
+      },
+      {
+        label: "Reports",
+        path: "/admin/report"
       }
+
     ],
 
     Receptionist: [
@@ -51,12 +64,28 @@ export default function Sidebar() {
         label: "Manage Patients",
         path: "/receptionist/manage-patients",
       },
+      {
+        label: "Create Order",
+        path: "/receptionist/create-order",
+      },
+      {
+        label: "Patient Orders",
+        path: "/receptionist/patient-orders",
+      },
     ],
 
     Physician: [
       {
         label: "Dashboard",
         path: "/physician",
+      },
+      {
+        label: "Orders",
+        path: "/physician/orders",
+      },
+      {
+        label: "Reports",
+        path: "/physician/reports",
       },
     ],
 
@@ -65,12 +94,28 @@ export default function Sidebar() {
         label: "Dashboard",
         path: "/pathologist",
       },
+      {
+        label: "Verify Results",
+        path: "/pathologist/verify-result",
+      },
+      {
+        label: "Approve Results",
+        path: "/pathologist/approve-result",
+      },
     ],
 
     "Lab Technician": [
       {
         label: "Dashboard",
         path: "/lab-technician",
+      },
+      {
+        label: "Pending Orders",
+        path: "/lab-technician/pending-orders",
+      },
+      {
+        label: "Enter Result",
+        path: "/lab-technician/enter-result",
       },
     ],
   };

@@ -2,6 +2,7 @@
 import styles from "@/components/manage.module.css";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/utils/api";
+import { API_BASE } from "../../../utils/constants";
 export default function ManageStaff() {
   const [staffs, setStaffs] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -24,7 +25,7 @@ export default function ManageStaff() {
 
   const fetchStaffs = async () => {
     try {
-      const response = await apiFetch("http://127.0.0.1:8000/staffs/");
+      const response = await apiFetch(`${API_BASE}/staffs/`);
 
       const data = await response.json();
 
@@ -116,7 +117,7 @@ export default function ManageStaff() {
       return;
     }
     try {
-      const response = await apiFetch("http://127.0.0.1:8000/signup", {
+      const response = await apiFetch(`${API_BASE}/signup`, {
         method: "POST",
         headers: {
           "Content-Type":
@@ -127,7 +128,7 @@ export default function ManageStaff() {
 
       const data = await response.json();
 
-      alert(data.message || "Staff Added");
+      alert(data.detail || "Staff Added");
 
       resetForm();
 
@@ -155,7 +156,7 @@ export default function ManageStaff() {
         payload.password=form.password
       }
       const response = await apiFetch(
-        `http://127.0.0.1:8000/staffs/${editingId}`,
+        `${API_BASE}/staffs/${editingId}`,
         {
           method: "PATCH",
           headers: {
@@ -186,7 +187,7 @@ export default function ManageStaff() {
     if (!confirmDelete) return;
 
     try {
-      const response = await apiFetch(`http://127.0.0.1:8000/staffs/${id}`, {
+      const response = await apiFetch(`${API_BASE}/staffs/${id}`, {
         method: "DELETE",
       });
 
