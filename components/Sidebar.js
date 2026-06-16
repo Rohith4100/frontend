@@ -98,10 +98,14 @@ export default function Sidebar() {
         label: "Verify Results",
         path: "/pathologist/verify-result",
       },
-      {
-        label: "Approve Results",
-        path: "/pathologist/approve-result",
-      },
+      // {
+      //   label: "Pending Results",
+      //   path: "/pathologist/approve-result",
+      // },
+      // {
+      //   label: "Verified Results",
+      //   path: "/pathologist/approve-result",
+      // },
     ],
 
     "Lab Technician": [
@@ -112,10 +116,6 @@ export default function Sidebar() {
       {
         label: "Pending Orders",
         path: "/lab-technician/pending-orders",
-      },
-      {
-        label: "Enter Result",
-        path: "/lab-technician/enter-result",
       },
     ],
   };

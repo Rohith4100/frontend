@@ -51,6 +51,7 @@ export default function Login() {
         return;
       }
       const data = await response.json();
+      console.log(data);
       localStorage.setItem(
         "token",
         data.access_token
@@ -64,6 +65,11 @@ export default function Login() {
       localStorage.setItem(
         "name",
         data.user.first_name + " " + data.user.last_name
+      );
+
+      localStorage.setItem(
+        "user_id",
+        data.user.id
       );
 
       const roleRoutes = {

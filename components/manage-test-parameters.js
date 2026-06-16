@@ -76,7 +76,6 @@ export default function ManageTestParameters() {
       alert("Parameter name required");
       return false;
     }
-
     return true;
   };
 

@@ -375,8 +375,7 @@ export default function ManagePatients() {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Patient Name</th>
                     <th>Gender</th>
                     <th>Phone</th>
                     <th>Blood Group</th>
@@ -388,8 +387,7 @@ export default function ManagePatients() {
                   {patients.map((patient) => (
                     <tr key={patient.id}>
                       <td>{patient.id}</td>
-                      <td>{patient.first_name}</td>
-                      <td>{patient.last_name}</td>
+                      <td>{patient.first_name}{ }{patient.last_name}</td>
                       <td>{patient.gender}</td>
                       <td>{patient.phone}</td>
                       <td>{patient.blood_group}</td>
