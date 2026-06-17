@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import styles from "@/components/manage.module.css";
 import { apiFetch } from "@/utils/api";
 import { API_BASE } from "@/utils/constants";
-
-export default function VerifyResults() {
+import { useRouter } from "next/navigation";
+export default function Results({ status, head }) {
   const [results, setResults] = useState([]);
   const [orders, setOrders] = useState([]);
   const [selectedResult, setSelectedResult] =
@@ -15,7 +15,7 @@ export default function VerifyResults() {
     fetchResults();
     fetchOrders();
   }, []);
-
+  const router = useRouter();
   const fetchResults = async () => {
     try {
       const response = await apiFetch(
@@ -23,8 +23,10 @@ export default function VerifyResults() {
       );
 
       const data = await response.json();
-
-      setResults(data);
+      const pending = data.filter(
+        (res) => res.status === status
+      );
+      setResults(pending);
     } catch (error) {
       console.error(error);
     }
@@ -45,10 +47,10 @@ export default function VerifyResults() {
   };
 
   const verifyResult = async (resultId) => {
-    const pathologistId = 
-    Number(
-      localStorage.getItem("user_id")
-    );
+    const pathologistId =
+      Number(
+        localStorage.getItem("user_id")
+      );
     alert(pathologistId);
 
     try {
@@ -64,6 +66,7 @@ export default function VerifyResults() {
       );
 
       const data = await response.json();
+
 
       if (!response.ok) {
         alert(data.detail);
@@ -87,7 +90,7 @@ export default function VerifyResults() {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>
-        Verify Laboratory Results
+        {head}
       </h1>
 
       <div className={styles.card}>
@@ -140,27 +143,32 @@ export default function VerifyResults() {
 
                     <td>
                       {result.verified_by ||
-                        "Pending"}
+                        "-"}
                     </td>
 
                     <td>
                       {result.status ===
-                      "Verified" ? (
-                        <span>
-                          Verified
-                        </span>
-                      ) : (
+                        "Pending" ? (
                         <button
-                          className={
-                            styles.button
-                          }
+                          className={styles.editBtn}
                           onClick={() =>
-                            verifyResult(
-                              result.id
+                            router.push(
+                              `/pathologist/review-result/${result.id}`
                             )
                           }
                         >
-                          Verify
+                          Review
+                        </button>
+                      ) : (
+                        <button
+                          className={styles.editBtn}
+                          onClick={() =>
+                            router.push(
+                              `/pathologist/review-result/${result.id}`
+                            )
+                          }
+                        >
+                         View
                         </button>
                       )}
                     </td>

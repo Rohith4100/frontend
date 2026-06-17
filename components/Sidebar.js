@@ -1,8 +1,8 @@
 "use client";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import styles from "./sidebar.module.css"
 export default function Sidebar() {
   const router = useRouter();
 
@@ -49,8 +49,8 @@ export default function Sidebar() {
         path: "/admin/order"
       },
       {
-        label: "Reports",
-        path: "/admin/report"
+        label: "Patient Reports",
+        path: "/admin/patient-reports"
       }
 
     ],
@@ -79,14 +79,18 @@ export default function Sidebar() {
         label: "Dashboard",
         path: "/physician",
       },
+      // {
+      //   label: "Orders",
+      //   path: "/physician/orders",
+      // },
       {
-        label: "Orders",
-        path: "/physician/orders",
-      },
-      {
-        label: "Reports",
+        label: "Test Reports",
         path: "/physician/reports",
       },
+      {
+        label: "Patient Reports",
+        path: "/physician/patient-report"
+      }
     ],
 
     Pathologist: [
@@ -95,17 +99,17 @@ export default function Sidebar() {
         path: "/pathologist",
       },
       {
-        label: "Verify Results",
-        path: "/pathologist/verify-result",
+        label: "Pending Results",
+        path: "/pathologist/pending-results",
       },
-      // {
-      //   label: "Pending Results",
-      //   path: "/pathologist/approve-result",
-      // },
-      // {
-      //   label: "Verified Results",
-      //   path: "/pathologist/approve-result",
-      // },
+      {
+        label: "Verified Results",
+        path: "/pathologist/verified-results",
+      },
+      {
+        label: "Rejected Results",
+        path: "/pathologist/rejected-results",
+      },
     ],
 
     "Lab Technician": [
@@ -122,20 +126,27 @@ export default function Sidebar() {
 
   return (
     <div
+      // className={styles.Sidebar}
       style={{
         width: "250px",
-        minHeight: "100vh",
+        height: "100vh",
+        position: "fixed",
+        left: 0,
+        top: 0,
         backgroundColor: "#1f2937",
         color: "white",
         padding: "20px",
+        overflowY: "auto",
       }}
     >
+
       <h2>CrenueLab</h2>
 
       <hr />
 
       {menus[role]?.map((item) => (
         <div
+          // className={styles.sidebar}
           key={item.path}
           style={{
             marginTop: "20px",
@@ -154,16 +165,12 @@ export default function Sidebar() {
       ))}
 
       <button
+        className={styles.logoutBtn}
         onClick={logout}
-        style={{
-          marginTop: "40px",
-          width: "100%",
-          padding: "10px",
-          cursor: "pointer",
-        }}
       >
         Logout
       </button>
     </div>
+
   );
 }

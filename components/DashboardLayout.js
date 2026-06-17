@@ -17,6 +17,7 @@ export default function DashboardLayout({
         style={{
           flex: 1,
           padding: "20px",
+          marginLeft: "250px",
         }}
       >
         {children}

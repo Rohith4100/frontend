@@ -18,7 +18,8 @@ export default function AdminLayout({
       <div
         style={{
         flex: 1,
-          padding: "20px",
+        padding: "20px",
+        marginLeft: "250px"
         }}
       >
         {children}

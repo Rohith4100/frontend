@@ -30,8 +30,8 @@ export default function PendingOrders() {
       const pendingOrders = data.filter(
         (order) =>
           order.status === "New" ||
-          order.status === "Collected" ||
-          order.status === "In Progress"
+          order.status === "Rejected" ||
+          order.status === "In Progress" 
       );
 
       setOrders(pendingOrders);

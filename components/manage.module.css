@@ -13,6 +13,19 @@
   margin-bottom: 30px;
 }
 
+.sub_title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 15px;
+}
+.topic {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  /* margin-bottom: 10px; */
+}
+
 /* Card Style */
 .card {
   background: white;
@@ -200,4 +213,60 @@
 .button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.filterSelect {
+  padding: 15px 40px;
+  border: none;
+  border-radius: 10px;
+  background: #f3f4f6;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterSelect:hover {
+  background: #e5e7eb;
+}
+
+.filterSelect:focus {
+  outline: none;
+  background: white;
+  box-shadow: 0 0 0 2px #2563eb;
+}
+
+.filterSelect option {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* searchBar styles */
+
+.searchInput {
+  width: 100%;
+  max-width: 400px;
+
+  padding: 12px 16px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  background: white;
+
+  font-size: 14px;
+
+  margin-bottom: 20px;
+
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37, 99, 235, 0.15);
 }

@@ -153,6 +153,8 @@ export default function ManagePatients() {
     });
   };
 
+  
+
   return (
     <div className={styles.container}>
       {selectedPatient ? (
