@@ -41,11 +41,15 @@ export default function Sidebar() {
         path: "/admin/catalog"
       },
       {
-        label: "Test Parameters",
+        label: "Manage Parameters",
         path: "/admin/test-parameters"
       },
       {
-        label: "Orders",
+        label : "Test Report",
+        path : "/admin/reports"
+      },
+      {
+        label: "Monitor Orders",
         path: "/admin/order"
       },
       {
@@ -69,29 +73,25 @@ export default function Sidebar() {
         path: "/receptionist/create-order",
       },
       {
-        label: "Patient Orders",
-        path: "/receptionist/patient-orders",
+        label: "Patient Reports",
+        path: "/receptionist/patient-reports",
       },
     ],
 
-    Physician: [
-      {
-        label: "Dashboard",
-        path: "/physician",
-      },
-      // {
-      //   label: "Orders",
-      //   path: "/physician/orders",
-      // },
-      {
-        label: "Test Reports",
-        path: "/physician/reports",
-      },
-      {
-        label: "Patient Reports",
-        path: "/physician/patient-report"
-      }
-    ],
+    // Physician: [
+    //   {
+    //     label: "Dashboard",
+    //     path: "/physician",
+    //   },
+    //   {
+    //     label: "Test Reports",
+    //     path: "/physician/reports",
+    //   },
+    //   {
+    //     label: "Patient Reports",
+    //     path: "/physician/patient-report"
+    //   }
+    // ],
 
     Pathologist: [
       {
@@ -112,16 +112,16 @@ export default function Sidebar() {
       },
     ],
 
-    "Lab Technician": [
-      {
-        label: "Dashboard",
-        path: "/lab-technician",
-      },
-      {
-        label: "Pending Orders",
-        path: "/lab-technician/pending-orders",
-      },
-    ],
+    // "Lab Technician": [
+    //   {
+    //     label: "Dashboard",
+    //     path: "/lab-technician",
+    //   },
+    //   {
+    //     label: "Pending Orders",
+    //     path: "/lab-technician/pending-orders",
+    //   },
+    // ],
   };
 
   return (

@@ -1,10 +1,9 @@
 "use client";
-
+import stylesd from "@/components/dashboard.module.css"
 import { useState } from "react";
 import { apiFetch } from "@/utils/api";
 import { API_BASE } from "@/utils/constants";
 import styles from "@/components/manage.module.css";
-
 export default function PatientReports() {
   const [phone, setPhone] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -51,38 +50,72 @@ export default function PatientReports() {
       console.error(error);
     }
   };
+  const downloadVisitPDF = async (
+    patientId,
+    visitDate
+  ) => {
+    try {
+      const token =
+        localStorage.getItem("token");
+
+      const response = await fetch(
+        `${API_BASE}/lab-results/visit-pdf/${patientId}/${visitDate}`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+      const blob =
+        await response.blob();
+
+      const url =
+        window.URL.createObjectURL(
+          blob
+        );
+
+      const link =
+        document.createElement("a");
+
+      link.href = url;
+
+      link.download =
+        `Visit_Report_${visitDate}.pdf`;
+
+      link.click();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>
-        Patient Reports
-      </h1>
+      <div className={stylesd.dashboardHeading}>
+        <div>
+          <h1 className={stylesd.dashboardTitle}>
+            Patient Reports
+          </h1>
 
-      {/* Search Section */}
-
-      <div className={styles.card}>
-        <h2
-        className={styles.title}
-        >Search Patient</h2>
+          <p className={stylesd.dashboardSubtitle}>
+            Search and view patient visit reports
+          </p>
+        </div>
+      </div>
+      <div className={styles.reportCard}>
+        <h2 className={styles.sub_title}>
+          Search Patient
+        </h2>
 
         <input
-          type="text"
-          placeholder="Enter Mobile Number"
+          className={styles.searchInput}
+          type="search"
+          placeholder="Enter mobile number..."
           value={phone}
-
-          onChange={(e) =>
-            searchPatients(
-              e.target.value
-            )
-          }
-          className={styles.input}
-          style={{
-            width: "100%",
-            padding: "20px",
-            fontSize:"18px",
-            color:"#1e293b"
-          }}
+          onChange={(e) => searchPatients(e.target.value)}
         />
+        {/* </div> */}
 
         {suggestions.length > 0 && (
           <div
@@ -112,7 +145,7 @@ export default function PatientReports() {
                   }}
                 >
                   <strong
-                  className={styles.sub_title}
+                    className={styles.sub_title}
                   >
                     {
                       patient.first_name
@@ -125,7 +158,7 @@ export default function PatientReports() {
                   <br />
 
                   <small
-                   className={styles.topic}
+                    className={styles.topic}
                   >
                     {
                       patient.phone
@@ -141,63 +174,246 @@ export default function PatientReports() {
       {/* Patient Details */}
 
       {patient && (
-        <div className={styles.card}>
-          <h2
-          className={styles.sub_title}
-          >
-            Patient Details
-          </h2>
+        <div className={styles.patientSummary}>
+          <h1 className={styles.patientName}>
+            {patient.first_name} {patient.last_name}
+          </h1>
 
-          <p>
-            <strong
-            className={styles.topic}
-            >
-              Name:
-            </strong>{" "}
-            {
-              patient.first_name
-            }{" "}
-            {
-              patient.last_name
-            }
-          </p>
+          <div className={styles.patientInfoGrid}>
+            <div className={styles.patientInfoItem}>
+              <span>Patient ID</span>
+              <strong>{patient.id}</strong>
+            </div>
 
-          <p>
-            <strong
-            className={styles.topic}
-            >
-              Mobile:
-            </strong>{" "}
-            {patient.phone}
-          </p>
+            <div className={styles.patientInfoItem}>
+              <span>Mobile</span>
+              <strong>{patient.phone}</strong>
+            </div>
 
-          <p>
-            <strong
-            className={styles.topic}
-            >
-              Blood Group:
-            </strong>{" "}
-            {
-              patient.blood_group
-            }
-          </p>
+            <div className={styles.patientInfoItem}>
+              <span>Gender</span>
+              <strong>{patient.gender}</strong>
+            </div>
 
-          <p>
-            <strong
-            className={styles.topic}
-            >
-              Gender:
-            </strong>{" "}
-            {
-              patient.gender
-            }
-          </p>
+            <div className={styles.patientInfoItem}>
+              <span>Blood Group</span>
+              <strong>{patient.blood_group}</strong>
+            </div>
+          </div>
         </div>
       )}
 
+      {Object.keys(reports).length > 0 &&
+        Object.keys(reports).map(
+          (visitDate) => (
+            <div
+              key={visitDate}
+              className={styles.visitCard}
+            >
+              <div
+                className={styles.visitHeader}
+                onClick={() =>
+                  setExpandedVisit(
+                    expandedVisit ===
+                      visitDate
+                      ? null
+                      : visitDate
+                  )
+                }
+              >
+                <div>
+                  <h2
+                    className={
+                      styles.sub_title
+                    }
+                  >
+                    Visit Date:{" "}
+                    {visitDate}
+                  </h2>
+
+                  <p
+                    className={
+                      styles.visitMeta
+                    }
+                  >
+                    {
+                      reports[
+                        visitDate
+                      ].length
+                    }{" "}
+                    Test(s)
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems:
+                      "center",
+                    gap: "15px",
+                  }}
+                >
+                  <button
+                    className={
+                      styles.visitDownloadBtn
+                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      downloadVisitPDF(
+                        patient.id,
+                        visitDate
+                      );
+                    }}
+                  >
+                    Download PDF
+                  </button>
+
+                  <span
+                    className={
+                      styles.expandIcon
+                    }
+                  >
+                    {expandedVisit ===
+                      visitDate
+                      ? "▲"
+                      : "▼"}
+                  </span>
+                </div>
+              </div>
+
+              {expandedVisit ===
+                visitDate && (
+                  <div
+                    style={{
+                      padding:
+                        "10px 20px 20px 20px",
+                    }}
+                  >
+                    {reports[
+                      visitDate
+                    ].map(
+                      (
+                        test,
+                        index
+                      ) => (
+                        <div
+                          key={index}
+                          className={
+                            styles.testCard
+                          }
+                        >
+                          <div
+                            className={
+                              styles.testHeader
+                            }
+                          >
+                            <h3
+                              className={
+                                styles.testTitle
+                              }
+                            >
+                              {
+                                test.test_name
+                              }
+                            </h3>
+
+                            <div
+                              className={
+                                styles.reportMeta
+                              }
+                            >
+                              <span>
+                                Entered By:{" "}
+                                {
+                                  test.entered_by
+                                }
+                              </span>
+
+                              <span>
+                                Verified
+                                By:{" "}
+                                {
+                                  test.verified_by
+                                }
+                              </span>
+                            </div>
+                          </div>
+
+                          <table
+                            className={
+                              stylesd.dashboardTable
+                            }
+                          >
+                            <thead>
+                              <tr>
+                                <th>
+                                  Parameter
+                                </th>
+                                <th>
+                                  Value
+                                </th>
+                                <th>
+                                  Unit
+                                </th>
+                                <th>
+                                  Reference
+                                  Range
+                                </th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              {test.parameters.map(
+                                (
+                                  parameter,
+                                  i
+                                ) => (
+                                  <tr
+                                    key={
+                                      i
+                                    }
+                                  >
+                                    <td>
+                                      {
+                                        parameter.parameter
+                                      }
+                                    </td>
+
+                                    <td>
+                                      {
+                                        parameter.value
+                                      }
+                                    </td>
+
+                                    <td>
+                                      {
+                                        parameter.unit
+                                      }
+                                    </td>
+
+                                    <td>
+                                      {
+                                        parameter.reference
+                                      }
+                                    </td>
+                                  </tr>
+                                )
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
+            </div>
+          )
+        )}
+
       {/* Visits */}
 
-      {Object.keys(reports).length >
+      {/* {Object.keys(reports).length >
         0 &&
         Object.keys(reports).map(
           (visitDate) => (
@@ -228,12 +444,24 @@ export default function PatientReports() {
                 }
               >
                 <h2
-                className={styles.sub_title}
+                  className={styles.sub_title}
                 >
                   Visit:{" "}
                   {visitDate}
                 </h2>
+                <button
+                  className={styles.visitDownloadBtn}
+                  onClick={(e) => {
+                    e.stopPropagation();
 
+                    downloadVisitPDF(
+                      patient.id,
+                      visitDate
+                    );
+                  }}
+                >
+                  Download Visit Report
+                </button>
                 <div>
                   (
                   {
@@ -244,7 +472,7 @@ export default function PatientReports() {
                   Tests)
                   {" "}
                   {expandedVisit ===
-                  visitDate
+                    visitDate
                     ? "▲"
                     : "▼"}
                 </div>
@@ -252,138 +480,130 @@ export default function PatientReports() {
 
               {expandedVisit ===
                 visitDate && (
-                <div
-                  style={{
-                    marginTop:
-                      "20px",
-                  }}
-                >
-                  {reports[
-                    visitDate
-                  ].map(
-                    (
-                      test,
-                      index
-                    ) => (
-                      <div
-                        key={
-                          index
-                        }
-                        style={{
-                          marginBottom:
-                            "30px",
-                          border:
-                            "1px solid #ddd",
-                          padding:
-                            "15px",
-                          borderRadius:
-                            "8px",
-                        }}
-                      >
-                        <h3
-                        className={styles.sub_title}>
-                          {
-                            test.test_name
+                  <div
+                    style={{
+                      marginTop:
+                        "20px",
+                    }}
+                  >
+                    {reports[
+                      visitDate
+                    ].map(
+                      (
+                        test,
+                        index
+                      ) => (
+                        <div
+                          key={
+                            index
                           }
-                        </h3>
-
-                        <p>
-                          <strong
-                          className={styles.topic}
-                          >
-                            Entered
-                            By:
-                          </strong>{" "}
-                          {
-                            test.entered_by
-                          }
-                        </p>
-
-                        <p>
-                          <strong
-                          className={styles.topic}
-                          >
-                            Verified
-                            By:
-                          </strong>{" "}
-                          {
-                            test.verified_by
-                          }
-                        </p>
-
-                        <table
-                          className={
-                            styles.table
-                          }
+                          className={styles.reportCard}
                         >
-                          <thead>
-                            <tr>
-                              <th>
-                                Parameter
-                              </th>
+                          <h3
+                            className={styles.sub_title}>
+                            {
+                              test.test_name
+                            }
+                          </h3>
 
-                              <th>
-                                Value
-                              </th>
+                          <p>
+                            <strong
+                              className={styles.topic}
+                            >
+                              Entered
+                              By:
+                            </strong>{" "}
+                            {
+                              test.entered_by
+                            }
+                          </p>
 
-                              <th>
-                                Unit
-                              </th>
+                          <p>
+                            <strong
+                              className={styles.topic}
+                            >
+                              Verified
+                              By:
+                            </strong>{" "}
+                            {
+                              test.verified_by
+                            }
+                          </p>
 
-                              <th>
-                                Reference
-                                Range
-                              </th>
-                            </tr>
-                          </thead>
+                          <table
+                            className={
+                              styles.table
+                            }
+                          >
+                            <thead>
+                              <tr>
+                                <th>
+                                  Parameter
+                                </th>
 
-                          <tbody>
-                            {test.parameters.map(
-                              (
-                                parameter,
-                                i
-                              ) => (
-                                <tr
-                                  key={
-                                    i
-                                  }
-                                >
-                                  <td>
-                                    {
-                                      parameter.parameter
+                                <th>
+                                  Value
+                                </th>
+
+                                <th>
+                                  Unit
+                                </th>
+
+                                <th>
+                                  Reference
+                                  Range
+                                </th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              {test.parameters.map(
+                                (
+                                  parameter,
+                                  i
+                                ) => (
+                                  <tr
+                                    key={
+                                      i
                                     }
-                                  </td>
+                                  >
+                                    <td>
+                                      {
+                                        parameter.parameter
+                                      }
+                                    </td>
 
-                                  <td>
-                                    {
-                                      parameter.value
-                                    }
-                                  </td>
+                                    <td>
+                                      {
+                                        parameter.value
+                                      }
+                                    </td>
 
-                                  <td>
-                                    {
-                                      parameter.unit
-                                    }
-                                  </td>
+                                    <td>
+                                      {
+                                        parameter.unit
+                                      }
+                                    </td>
 
-                                  <td>
-                                    {
-                                      parameter.reference
-                                    }
-                                  </td>
-                                </tr>
-                              )
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    )
-                  )}
-                </div>
-              )}
+                                    <td>
+                                      {
+                                        parameter.reference
+                                      }
+                                    </td>
+                                  </tr>
+                                )
+                              )}
+                            </tbody>
+                          </table>
+
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
             </div>
           )
-        )}
+        )} */}
     </div>
   );
 }

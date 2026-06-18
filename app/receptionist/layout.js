@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import DashboardLayout from "@/components/DashboardLayout";
+import DashboardLayout from "@/components/SideBarLayout";
 export default function ReceptionistLayout({
   children,
 }) {

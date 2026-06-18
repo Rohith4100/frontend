@@ -1,5 +1,6 @@
 "use client";
 import styles from "@/components/manage.module.css";
+import stylesd from "@/components/dashboard.module.css";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/utils/api";
 import { API_BASE } from "../../../utils/constants";
@@ -7,7 +8,7 @@ export default function ManageStaff() {
   const [staffs, setStaffs] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [selectedStaff, setSelectedStaff] = useState(null);
-
+  const [search, setSearch] = useState("");
   const [form, setForm] = useState({
     first_name: "",
     last_name: "",
@@ -152,8 +153,8 @@ export default function ManageStaff() {
         phone: form.phone,
         address: form.address,
       };
-      if(form.password.trim()){
-        payload.password=form.password
+      if (form.password.trim()) {
+        payload.password = form.password
       }
       const response = await apiFetch(
         `${API_BASE}/staffs/${editingId}`,
@@ -233,10 +234,25 @@ export default function ManageStaff() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container}
+      style={{
+        flex: 1,
+        padding: "20px"
+      }}
+    >
       {selectedStaff ? (
         <div className={styles.card}>
-          <h1 className={styles.title}>Staff Details</h1>
+          <div className={stylesd.dashboardHeading}>
+            <div>
+              <h1 className={stylesd.dashboardTitle}>
+                Staff Details
+              </h1>
+
+              <p className={stylesd.dashboardSubtitle}>
+                Complete staff information
+              </p>
+            </div>
+          </div>
 
           <div className={styles.patientCard}>
             <div className={styles.infoBox}>
@@ -283,7 +299,17 @@ export default function ManageStaff() {
         </div>
       ) : (
         <>
-          <h1 className={styles.title}>Manage Staff</h1>
+          <div className={stylesd.dashboardHeading}>
+            <div>
+              <h1 className={stylesd.dashboardTitle}>
+                Manage Staff
+              </h1>
+
+              <p className={stylesd.dashboardSubtitle}>
+                Create, update and manage laboratory staff
+              </p>
+            </div>
+          </div>
 
           <div className={styles.card}>
             <h2 className={styles.sectionTitle}>
@@ -434,29 +460,53 @@ export default function ManageStaff() {
             )}
           </div>
 
-          <div className={styles.card}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "20px",
-              }}
-            >
-              <h2 className={styles.sectionTitle}>
-                Staff List
-              </h2>
 
-              <button
-                className={styles.refreshBtn}
-                onClick={fetchStaffs}
-              >
-                Refresh
-              </button>
+          <div className={styles.card}>
+
+            <div className={stylesd.toolbar}>
+              <div>
+                <h2 className={stylesd.dashboardTitle}>
+                  Staff Directory
+                </h2>
+
+                <p className={stylesd.dashboardSubtitle}>
+                  View and manage all registered staff
+                </p>
+              </div>
+
+              <div>
+                <button
+                  className={styles.refreshBtn}
+                  onClick={fetchStaffs}
+                >
+                  Refresh
+                </button>
+              </div>
+
+            </div>
+            <div>
+              <span
+                className={styles.sub_title}
+                style={
+                  { marginLeft: "5px" }
+                }
+              >Search</span>
+              <div className={stylesd.toolbar}>
+                <input
+                  className={styles.searchInput}
+                  type="search"
+                  placeholder="Search by Name, Email or Role ...."
+                  value={search}
+                  style={{ marginTop: "5px" }}
+                  onChange={(e) =>
+                    setSearch(e.target.value)
+                  }
+                />
+              </div>
             </div>
 
             <div className={styles.tableWrapper}>
-              <table className={styles.table}>
+              <table className={stylesd.dashboardTable}>
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -468,47 +518,57 @@ export default function ManageStaff() {
                 </thead>
 
                 <tbody>
-                  {staffs.map((staff) => (
-                    <tr key={staff.id}>
-                      <td>{staff.id}</td>
-                      <td>{staff.first_name} {staff.last_name}</td>
-                      <td>{staff.email}</td>
-                      <td>{staff.role}</td>
+                  {staffs.filter((staff) =>
+                    `${staff.first_name} ${staff.last_name}`
+                      .toLowerCase()
+                      .includes(search.toLowerCase()) ||
+                    staff.email
+                      ?.toLowerCase()
+                      .includes(search.toLowerCase()) ||
+                    staff.role
+                      ?.toLowerCase().includes(search.toLowerCase())
+                  )
+                    .map((staff) => (
+                      <tr key={staff.id}>
+                        <td>{staff.id}</td>
+                        <td>{staff.first_name} {staff.last_name}</td>
+                        <td>{staff.email}</td>
+                        <td>{staff.role}</td>
 
-                      <td>
-                        <div className={styles.actions}>
-                          <button
-                            className={styles.viewBtn}
-                            onClick={() =>
-                              viewStaff(staff)
-                            }
-                          >
-                            View
-                          </button>
+                        <td>
+                          <div className={styles.actions}>
+                            <button
+                              className={styles.viewBtn}
+                              onClick={() =>
+                                viewStaff(staff)
+                              }
+                            >
+                              View
+                            </button>
 
-                          <button
-                            className={styles.editBtn}
-                            onClick={() =>
-                              editStaff(staff)
-                            }
-                          >
-                            Edit
-                          </button>
+                            <button
+                              className={styles.editBtn}
+                              onClick={() =>
+                                editStaff(staff)
+                              }
+                            >
+                              Edit
+                            </button>
 
-                          <button
-                            className={styles.deleteBtn}
-                            onClick={() =>
-                              deleteStaff(
-                                staff.id
-                              )
-                            }
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            <button
+                              className={styles.deleteBtn}
+                              onClick={() =>
+                                deleteStaff(
+                                  staff.id
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>

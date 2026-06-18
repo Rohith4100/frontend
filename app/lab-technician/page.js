@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import PendingOrders from "./pending-orders/page";
+import ProtectedRoute from "../../components/protectedRoute";
 export default function LabTechnician() {
   const router = useRouter();
   const [name, setName] = useState("");
@@ -29,7 +30,7 @@ export default function LabTechnician() {
           fontSize: "18px",
         }}
       >
-        Welcome, <strong>{name}</strong>
+        Welcome, <strong>{name.toUpperCase()}</strong>
       </p>
 
       <div
@@ -46,6 +47,12 @@ export default function LabTechnician() {
           Manage laboratory tests, patient samples, and test results.
         </p>
       </div>
+
+      {/* <ProtectedRoute role="Lab Technician">
+        <PendingOrders />
+      </ProtectedRoute> */}
+
+
     </div>
   );
 }

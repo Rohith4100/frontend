@@ -2,28 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Sidebar from "@/components/Sidebar";
-import DashboardLayout from "@/components/DashboardLayout";
+import DashboardLayout from "@/components/SideBarLayout"
 export default function AdminLayout({
   children,
 }) {
-  return (
-    <div
-      style={{
-        display: "flex",
-      }}
-    >
-      <Sidebar />
-
-      <div
-        style={{
-        flex: 1,
-        padding: "20px",
-        marginLeft: "250px"
-        }}
-      >
-        {children}
-      </div>
-    </div>
+   return (
+    <DashboardLayout>
+      {children}
+    </DashboardLayout>
   );
 }

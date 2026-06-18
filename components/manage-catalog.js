@@ -1,5 +1,5 @@
 "use client";
-
+import stylesd from "@/components/dashboard.module.css";
 import { useEffect, useState } from "react";
 import styles from "@/components/manage.module.css";
 import { apiFetch } from "@/utils/api";
@@ -9,7 +9,7 @@ export default function ManageCatalog() {
   const [tests, setTests] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [selectedTest, setSelectedTest] = useState(null);
-
+  const [search, setSearch] = useState("");
   const [form, setForm] = useState({
     test_name: "",
     description: "",
@@ -168,9 +168,17 @@ export default function ManageCatalog() {
     <div className={styles.container}>
       {selectedTest ? (
         <div className={styles.card}>
-          <h1 className={styles.title}>
-            Test Details
-          </h1>
+          <div className={stylesd.dashboardHeading}>
+            <div>
+              <h1 className={stylesd.dashboardTitle}>
+                Test Details
+              </h1>
+
+              <p className={stylesd.dashboardSubtitle}>
+                Complete test information
+              </p>
+            </div>
+          </div>
 
           <div className={styles.patientCard}>
             <div className={styles.infoBox}>
@@ -215,9 +223,17 @@ export default function ManageCatalog() {
         </div>
       ) : (
         <>
-          <h1 className={styles.title}>
-            Manage Test Catalog
-          </h1>
+          <div className={stylesd.dashboardHeading}>
+            <div>
+              <h1 className={stylesd.dashboardTitle}>
+                Test Catalog Management
+              </h1>
+
+              <p className={stylesd.dashboardSubtitle}>
+                Create and manage laboratory tests
+              </p>
+            </div>
+          </div>
 
           <div className={styles.card}>
             <h2 className={styles.sectionTitle}>
@@ -287,29 +303,56 @@ export default function ManageCatalog() {
           </div>
 
           <div className={styles.card}>
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 justifyContent:
                   "space-between",
-                alignItems: "center",
+                // alignItems: "center",
                 marginBottom: "20px",
               }}
-            >
-              <h2 className={styles.sectionTitle}>
-                Test Catalog List
-              </h2>
+            > */}
+              <div className={stylesd.toolbar}>
+                <div>
+                  <h2 className={stylesd.dashboardTitle}>
+                    Test Catalog
+                  </h2>
 
-              <button
-                className={styles.refreshBtn}
-                onClick={fetchTests}
-              >
-                Refresh
-              </button>
+                  <p className={stylesd.dashboardSubtitle}>
+                    Available laboratory investigations
+                  </p>
+                </div>
+
+                <button
+                  className={styles.refreshBtn}
+                  onClick={fetchTests}
+                >
+                  Refresh
+                </button>
+              {/* </div> */}
             </div>
-
+            <span
+              className={styles.sub_title}
+              style={
+                  {marginTop:"-6px"},
+                  {marginLeft:"5px"}
+              }
+              >Search</span>
+            <div className={stylesd.toolbar}>
+              
+              <input
+                className={styles.searchInput}
+                type="search"
+                style={{marginTop:"5px"}}
+                placeholder="Search by test name..."
+                value={search}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
+              />
+            </div>
             <div className={styles.tableWrapper}>
-              <table className={styles.table}>
+              <table className={stylesd.dashboardTable}>
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -321,62 +364,72 @@ export default function ManageCatalog() {
 
                 <tbody>
                   {tests.length > 0 ? (
-                    tests.map((test) => (
-                      <tr key={test.id}>
-                        <td>{test.id}</td>
+                    tests.filter(
+                      (test) =>
+                        test.test_name
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
 
-                        <td>
-                          {test.test_name}
-                        </td>
+                        test.description
+                          ?.toLowerCase()
+                          .includes(search.toLowerCase())
+                    )
+                      .map((test) => (
+                        <tr key={test.id}>
+                          <td>{test.id}</td>
 
-                        <td>
-                          {test.description}
-                        </td>
+                          <td>
+                            {test.test_name}
+                          </td>
 
-                        <td>
-                          <div
-                            className={
-                              styles.actions
-                            }
-                          >
-                            <button
+                          <td>
+                            {test.description}
+                          </td>
+
+                          <td>
+                            <div
                               className={
-                                styles.viewBtn
-                              }
-                              onClick={() =>
-                                viewTest(test)
+                                styles.actions
                               }
                             >
-                              View
-                            </button>
+                              <button
+                                className={
+                                  styles.viewBtn
+                                }
+                                onClick={() =>
+                                  viewTest(test)
+                                }
+                              >
+                                View
+                              </button>
 
-                            <button
-                              className={
-                                styles.editBtn
-                              }
-                              onClick={() =>
-                                editTest(test)
-                              }
-                            >
-                              Edit
-                            </button>
+                              <button
+                                className={
+                                  styles.editBtn
+                                }
+                                onClick={() =>
+                                  editTest(test)
+                                }
+                              >
+                                Edit
+                              </button>
 
-                            <button
-                              className={
-                                styles.deleteBtn
-                              }
-                              onClick={() =>
-                                deleteTest(
-                                  test.id
-                                )
-                              }
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
+                              <button
+                                className={
+                                  styles.deleteBtn
+                                }
+                                onClick={() =>
+                                  deleteTest(
+                                    test.id
+                                  )
+                                }
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
                   ) : (
                     <tr>
                       <td

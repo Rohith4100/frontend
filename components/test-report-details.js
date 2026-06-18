@@ -5,7 +5,7 @@ import { apiFetch } from "@/utils/api";
 import { API_BASE } from "@/utils/constants";
 import styles from "@/components/manage.module.css";
 
-export default function PhysicianReportDetails({
+export default function ReportDetails({
   resultId,
 }) {
   const [report, setReport] =

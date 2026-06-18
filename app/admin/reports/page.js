@@ -5,8 +5,8 @@ import Reports from "@/components/test-reports";
 
 export default function ReportsPage() {
   return (
-    <ProtectedRoute role="Physician">
-      <Reports role="physician"/>
+    <ProtectedRoute role="Administrator">
+      <Reports role="admin"/>
     </ProtectedRoute>
   );
 }

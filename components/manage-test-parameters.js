@@ -1,5 +1,5 @@
 "use client";
-
+import stylesd from "@/components/dashboard.module.css";
 import { useEffect, useState } from "react";
 import styles from "@/components/manage.module.css";
 import { apiFetch } from "@/utils/api";
@@ -8,7 +8,7 @@ import { API_BASE } from "@/utils/constants";
 export default function ManageTestParameters() {
   const [parameters, setParameters] = useState([]);
   const [tests, setTests] = useState([]);
-
+  const [search, setSearch] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [selectedParameter, setSelectedParameter] =
     useState(null);
@@ -219,9 +219,17 @@ export default function ManageTestParameters() {
     <div className={styles.container}>
       {selectedParameter ? (
         <div className={styles.card}>
-          <h1 className={styles.title}>
-            Parameter Details
-          </h1>
+          <div className={stylesd.dashboardHeading}>
+            <div>
+              <h1 className={stylesd.dashboardTitle}>
+                Parameter Details
+              </h1>
+
+              <p className={stylesd.dashboardSubtitle}>
+                Complete parameter information
+              </p>
+            </div>
+          </div>
 
           <div className={styles.patientCard}>
             <div className={styles.infoBox}>
@@ -290,9 +298,17 @@ export default function ManageTestParameters() {
         </div>
       ) : (
         <>
-          <h1 className={styles.title}>
-            Manage Test Parameters
-          </h1>
+          <div className={stylesd.dashboardHeading}>
+            <div>
+              <h1 className={stylesd.dashboardTitle}>
+                Test Parameter Management
+              </h1>
+
+              <p className={stylesd.dashboardSubtitle}>
+                Configure parameters, units and reference ranges
+              </p>
+            </div>
+          </div>
 
           <div className={styles.card}>
             <h2 className={styles.sectionTitle}>
@@ -409,20 +425,45 @@ export default function ManageTestParameters() {
                 marginBottom: "20px",
               }}
             >
-              <h2 className={styles.sectionTitle}>
-                Parameters List
-              </h2>
+              <div className={stylesd.toolbar}>
+                <div>
+                  <h2 className={stylesd.dashboardTitle}>
+                    Test Parameters
+                  </h2>
 
-              <button
-                className={styles.refreshBtn}
-                onClick={fetchParameters}
-              >
-                Refresh
-              </button>
+                  <p className={stylesd.dashboardSubtitle}>
+                    Laboratory test configuration
+                  </p>
+                </div>
+
+                <button
+                  className={styles.refreshBtn}
+                  onClick={fetchParameters}
+                >
+                  Refresh
+                </button>
+              </div>
+            </div><span
+              className={styles.sub_title}
+              style={
+                  {marginLeft:"5px"}
+              }
+              >Search</span>
+            <div className={stylesd.toolbar}>
+              <input
+                className={styles.searchInput}
+                type="search"
+                style={{marginTop:"5px"}}
+                type="search"
+                placeholder="Search Parameter, Unit, Reference Range..."
+                value={search}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
+              />
             </div>
-
             <div className={styles.tableWrapper}>
-              <table className={styles.table}>
+              <table className={stylesd.dashboardTable}>
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -435,86 +476,98 @@ export default function ManageTestParameters() {
                 </thead>
 
                 <tbody>
-                  {parameters.map(
-                    (parameter) => (
-                      <tr
-                        key={parameter.id}
-                      >
-                        <td>
-                          {parameter.id}
-                        </td>
+                  {parameters.filter((parameter) =>
+                    parameter.parameter_name
+                      ?.toLowerCase()
+                      .includes(search.toLowerCase()) ||
+                    parameter.unit
+                      ?.toLowerCase()
+                      .includes(search.toLowerCase()) ||
+                    parameter.reference_range
+                      ?.toLowerCase()
+                      .includes(search.toLowerCase())
+                  )
 
-                        <td>
-                          {getTestName(
-                            parameter.test_id
-                          )}
-                        </td>
+                    .map(
+                      (parameter) => (
+                        <tr
+                          key={parameter.id}
+                        >
+                          <td>
+                            {parameter.id}
+                          </td>
 
-                        <td>
-                          {
-                            parameter.parameter_name
-                          }
-                        </td>
+                          <td>
+                            {getTestName(
+                              parameter.test_id
+                            )}
+                          </td>
 
-                        <td>
-                          {parameter.unit}
-                        </td>
-
-                        <td>
-                          {
-                            parameter.reference_range
-                          }
-                        </td>
-
-                        <td>
-                          <div
-                            className={
-                              styles.actions
+                          <td>
+                            {
+                              parameter.parameter_name
                             }
-                          >
-                            <button
-                              className={
-                                styles.viewBtn
-                              }
-                              onClick={() =>
-                                viewParameter(
-                                  parameter
-                                )
-                              }
-                            >
-                              View
-                            </button>
+                          </td>
 
-                            <button
-                              className={
-                                styles.editBtn
-                              }
-                              onClick={() =>
-                                editParameter(
-                                  parameter
-                                )
-                              }
-                            >
-                              Edit
-                            </button>
+                          <td>
+                            {parameter.unit}
+                          </td>
 
-                            <button
+                          <td>
+                            {
+                              parameter.reference_range
+                            }
+                          </td>
+
+                          <td>
+                            <div
                               className={
-                                styles.deleteBtn
-                              }
-                              onClick={() =>
-                                deleteParameter(
-                                  parameter.id
-                                )
+                                styles.actions
                               }
                             >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  )}
+                              <button
+                                className={
+                                  styles.viewBtn
+                                }
+                                onClick={() =>
+                                  viewParameter(
+                                    parameter
+                                  )
+                                }
+                              >
+                                View
+                              </button>
+
+                              <button
+                                className={
+                                  styles.editBtn
+                                }
+                                onClick={() =>
+                                  editParameter(
+                                    parameter
+                                  )
+                                }
+                              >
+                                Edit
+                              </button>
+
+                              <button
+                                className={
+                                  styles.deleteBtn
+                                }
+                                onClick={() =>
+                                  deleteParameter(
+                                    parameter.id
+                                  )
+                                }
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      )
+                    )}
                 </tbody>
               </table>
             </div>

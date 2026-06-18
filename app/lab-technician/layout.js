@@ -1,20 +1,15 @@
+
 "use client";
 
-import { useRouter } from "next/navigation";
-import DashboardLayout from "@/components/DashboardLayout";
-export default function LabTechnicianLayout({ children }) {
-  const router = useRouter();
+import DashboardLayout from "@/components/TopBarLayout";
+import TopBar from "@/components/topbar";
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("name");
-
-    router.push("/login");
-  };
-
+export default function PhysicianLayout({
+  children,
+}) {
   return (
     <DashboardLayout>
+      {/* <TopBar /> */}
       {children}
     </DashboardLayout>
   );

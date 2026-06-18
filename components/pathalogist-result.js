@@ -10,7 +10,7 @@ export default function Results({ status, head }) {
   const [orders, setOrders] = useState([]);
   const [selectedResult, setSelectedResult] =
     useState(null);
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
     fetchResults();
     fetchOrders();
@@ -114,7 +114,15 @@ export default function Results({ status, head }) {
             Refresh
           </button>
         </div>
-
+        <input
+          className={styles.searchInput}
+          type="search"
+          placeholder="Search result..."
+          value={search}
+          onChange={(e) =>
+            setSearch(e.target.value)
+          }
+        />
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
             <thead>
@@ -129,51 +137,63 @@ export default function Results({ status, head }) {
 
             <tbody>
               {results.length > 0 ? (
-                results.map((result) => (
-                  <tr key={result.id}>
-                    <td>{result.id}</td>
+                results.filter((result) =>
+                  result.id
+                    .toString()
+                    .includes(search) ||
+                  result.order_id
+                    .toString()
+                    .includes(search) ||
+                  result.status
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+                )
 
-                    <td>
-                      {result.order_id}
-                    </td>
+                  .map((result) => (
+                    <tr key={result.id}>
+                      <td>{result.id}</td>
 
-                    <td>
-                      {result.status}
-                    </td>
+                      <td>
+                        {result.order_id}
+                      </td>
 
-                    <td>
-                      {result.verified_by ||
-                        "-"}
-                    </td>
+                      <td>
+                        {result.status}
+                      </td>
 
-                    <td>
-                      {result.status ===
-                        "Pending" ? (
-                        <button
-                          className={styles.editBtn}
-                          onClick={() =>
-                            router.push(
-                              `/pathologist/review-result/${result.id}`
-                            )
-                          }
-                        >
-                          Review
-                        </button>
-                      ) : (
-                        <button
-                          className={styles.editBtn}
-                          onClick={() =>
-                            router.push(
-                              `/pathologist/review-result/${result.id}`
-                            )
-                          }
-                        >
-                         View
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))
+                      <td>
+                        {result.verified_by ||
+                          "-"}
+                      </td>
+
+                      <td>
+                        {result.status ===
+                          "Pending" ? (
+                          <button
+                            className={styles.editBtn}
+                            onClick={() =>
+                              router.push(
+                                `/pathologist/review-result/${result.id}`
+                              )
+                            }
+                          >
+                            Review
+                          </button>
+                        ) : (
+                          <button
+                            className={styles.editBtn}
+                            onClick={() =>
+                              router.push(
+                                `/pathologist/review-result/${result.id}`
+                              )
+                            }
+                          >
+                            View
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))
               ) : (
                 <tr>
                   <td

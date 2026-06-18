@@ -1,5 +1,6 @@
 "use client";
 import styles from "@/components/manage.module.css";
+import stylesd from "@/components/dashboard.module.css"
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/utils/api";
 import { API_BASE } from "../utils/constants";
@@ -7,7 +8,7 @@ export default function ManagePatients() {
   const [patients, setPatients] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [selectedPatient, setSelectedPatient] = useState(null);
-
+  const [search, setSearch] = useState("");
   const [patient, setPatient] = useState({
     first_name: "",
     last_name: "",
@@ -153,13 +154,23 @@ export default function ManagePatients() {
     });
   };
 
-  
+
 
   return (
     <div className={styles.container}>
       {selectedPatient ? (
         <div className={styles.card}>
-          <h1 className={styles.title}>Patient Details</h1>
+          <div className={stylesd.dashboardHeading}>
+            <div>
+              <h1 className={stylesd.dashboardTitle}>
+                Patient Details
+              </h1>
+
+              <p className={stylesd.dashboardSubtitle}>
+                Complete patient information
+              </p>
+            </div>
+          </div>
 
           <div className={styles.patientCard}>
             <div className={styles.infoBox}>
@@ -215,7 +226,17 @@ export default function ManagePatients() {
         </div>
       ) : (
         <>
-          <h1 className={styles.title}>Manage Patients</h1>
+          <div className={stylesd.dashboardHeading}>
+            <div>
+              <h1 className={stylesd.dashboardTitle}>
+                Manage Patients
+              </h1>
+
+              <p className={stylesd.dashboardSubtitle}>
+                Register, update and manage patient records
+              </p>
+            </div>
+          </div>
 
           <div className={styles.card}>
             <h2 className={styles.sectionTitle}>
@@ -352,17 +373,16 @@ export default function ManagePatients() {
           </div>
 
           <div className={styles.card}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "20px",
-              }}
-            >
-              <h2 className={styles.sectionTitle}>
-                Patients List
-              </h2>
+            <div className={stylesd.toolbar}>
+              <div>
+                <h2 className={stylesd.dashboardTitle}>
+                  Patient Directory
+                </h2>
+
+                <p className={stylesd.dashboardSubtitle}>
+                  View and manage registered patients
+                </p>
+              </div>
 
               <button
                 className={styles.refreshBtn}
@@ -371,9 +391,27 @@ export default function ManagePatients() {
                 Refresh
               </button>
             </div>
-
+            <span
+                className={styles.sub_title}
+                style={
+                  { marginLeft: "5px" }
+                }
+              >Search</span>
+            <div className={stylesd.toolbar}>
+              <input
+                className={styles.searchInput}
+                type="search"
+                style={{marginTop:"5px"}}
+                placeholder="Search by Name, Phone, Email..."
+                value={search}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
+              />
+            </div>
             <div className={styles.tableWrapper}>
-              <table className={styles.table}>
+
+              <table className={stylesd.dashboardTable}>
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -384,47 +422,60 @@ export default function ManagePatients() {
                     <th>Actions</th>
                   </tr>
                 </thead>
-
+                {/* <input type="search"></input> */}
                 <tbody>
-                  {patients.map((patient) => (
-                    <tr key={patient.id}>
-                      <td>{patient.id}</td>
-                      <td>{patient.first_name}{ }{patient.last_name}</td>
-                      <td>{patient.gender}</td>
-                      <td>{patient.phone}</td>
-                      <td>{patient.blood_group}</td>
+                  {patients.filter(
+                    (patient) =>
+                      `${patient.first_name} ${patient.last_name}`
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                      patient.phone
+                        ?.toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                      patient.email
+                        ?.toLowerCase()
+                        .includes(search.toLowerCase())
+                  )
+                    .map((patient) => (
+                      <tr key={patient.id}>
+                        <td>{patient.id}</td>
+                        <td>{patient.first_name}{ }{patient.last_name}</td>
+                        <td>{patient.gender}</td>
+                        <td>{patient.phone}</td>
+                        <td>{patient.blood_group}</td>
 
-                      <td>
-                        <div className={styles.actions}>
-                          <button
-                            className={styles.viewBtn}
-                            onClick={() => viewPatient(patient)}
-                          >
-                            View
-                          </button>
+                        <td>
+                          <div className={styles.actions}>
+                            <button
+                              className={styles.viewBtn}
+                              onClick={() => viewPatient(patient)}
+                            >
+                              View
+                            </button>
 
-                          <button
-                            className={styles.editBtn}
-                            onClick={() => editPatient(patient)}
-                          >
-                            Edit
-                          </button>
+                            <button
+                              className={styles.editBtn}
+                              onClick={() => editPatient(patient)}
+                            >
+                              Edit
+                            </button>
 
-                          <button
-                            className={styles.deleteBtn}
-                            onClick={() => deletePatient(patient.id)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            <button
+                              className={styles.deleteBtn}
+                              onClick={() => deletePatient(patient.id)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
           </div>
         </>
+        
       )}
     </div>
   );

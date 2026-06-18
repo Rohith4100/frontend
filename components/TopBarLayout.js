@@ -1,6 +1,6 @@
 "use client";
 
-import Sidebar from "./Sidebar";
+import TopBar from "./topbar";
 
 export default function DashboardLayout({
   children,
@@ -9,15 +9,21 @@ export default function DashboardLayout({
     <div
       style={{
         display: "flex",
-      }}
+      },
+      {
+        flexDirection: "row"
+      }
+      }
     >
-      <Sidebar />
+      <TopBar />
 
       <div
         style={{
           flex: 1,
           padding: "20px",
-          marginLeft: "250px",
+          height: "calc(100%-250px)",
+          marginTop: "-40px",
+          minHeight: 0
         }}
       >
         {children}
