@@ -22,7 +22,6 @@ export default function DashboardLayout({
           flex: 1,
           padding: "20px",
           height: "calc(100%-250px)",
-          marginTop: "-40px",
           minHeight: 0
         }}
       >

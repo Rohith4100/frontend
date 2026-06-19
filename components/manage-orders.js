@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import styles from "@/components/manage.module.css";
 import { apiFetch } from "@/utils/api";
 import { API_BASE } from "@/utils/constants";
-
+import stylesd from "@/components/dashboard.module.css"
 export default function ManageOrders() {
   const [orders, setOrders] = useState([]);
   const [patients, setPatients] = useState([]);
   const [physicians, setPhysicians] = useState([]);
   const [tests, setTests] = useState([]);
-
+  const [search, setSearch] = useState("");
   const [selectedOrder, setSelectedOrder] =
     useState(null);
 
@@ -137,7 +137,7 @@ export default function ManageOrders() {
       if (!response.ok) {
         alert(
           data.detail ||
-            "Failed to create order"
+          "Failed to create order"
         );
         return;
       }
@@ -191,12 +191,33 @@ export default function ManageOrders() {
       behavior: "smooth",
     });
   };
+  const filteredOrders = orders.filter((order) => {
+    const patientName = getPatientName(
+      order.patient_id
+    ).toLowerCase();
 
+    const physicianName = getPhysicianName(
+      order.physician_id
+    ).toLowerCase();
+
+    const testName = getTestName(
+      order.test_id
+    ).toLowerCase();
+
+    const query = search.toLowerCase();
+
+    return (
+      patientName.includes(query) ||
+      physicianName.includes(query) ||
+      testName.includes(query) ||
+      String(order.id).includes(query)
+    );
+  });
   return (
     <div className={styles.container}>
       {selectedOrder ? (
         <div className={styles.card}>
-          <h1 className={styles.title}>
+          <h1 className={stylesd.dashboardTitle}>
             Order Details
           </h1>
 
@@ -283,12 +304,12 @@ export default function ManageOrders() {
         </div>
       ) : (
         <>
-          <h1 className={styles.title}>
+          <h1 className={stylesd.dashboardTitle}>
             Create Test Order
           </h1>
 
           <div className={styles.card}>
-            <h2 className={styles.sectionTitle}>
+            <h2 className={stylesd.dashboardTitle}>
               New Test Order
             </h2>
 
@@ -425,7 +446,7 @@ export default function ManageOrders() {
                 marginBottom: "20px",
               }}
             >
-              <h2 className={styles.sectionTitle}>
+              <h2 className={stylesd.dashboardTitle}>
                 Orders List
               </h2>
 
@@ -436,9 +457,24 @@ export default function ManageOrders() {
                 Refresh
               </button>
             </div>
-
+            <span
+              className={styles.sub_title}
+              style={{ marginLeft: "5px" }}
+            >Search</span>
+            <div className={styles.searchContainer}>
+              <input
+                type="search"
+                style={{ marginTop: "5px" }}
+                placeholder="Search order, patient, physician or test..."
+                value={search}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
+                className={styles.searchInput}
+              />
+            </div>
             <div className={styles.tableWrapper}>
-              <table className={styles.table}>
+              <table className={stylesd.dashboardTable}>
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -452,7 +488,7 @@ export default function ManageOrders() {
                 </thead>
 
                 <tbody>
-                  {orders.map((order) => (
+                  {filteredOrders.map((order) => (
                     <tr
                       key={order.id}
                     >
@@ -479,14 +515,33 @@ export default function ManageOrders() {
                       </td>
 
                       <td>
-                        {
-                          order.priority
-                        }
+                        <span
+                        className={`${stylesd.statusBadge}
+                            ${order.priority === "Normal"
+                            ? stylesd.verifiedStatus
+                            : order.priority === "STAT"
+                              ? stylesd.rejectedStatus
+                              :stylesd.completedStatus
+                          }`}
+                      >
+                        {order.priority}
+                      </span>
                       </td>
-
                       <td>
+                      <span
+                        className={`${stylesd.statusBadge}
+                            ${order.status === "Verified"
+                            ? stylesd.verifiedStatus
+                            : order.status === "Rejected"
+                              ? stylesd.rejectedStatus
+                              : order.status === "Completed"
+                                ? stylesd.completedStatus
+                                : stylesd.newStatus
+                          }`}
+                      >
                         {order.status}
-                      </td>
+                      </span>
+                    </td>
 
                       <td>
                         <button
