@@ -122,6 +122,10 @@ export default function TopBar() {
         label: "Pending Orders",
         path: "/lab-technician/pending-orders",
       },
+      {
+        label: "Completed Orders",
+        path:"/lab-technician/completed-orders"
+      }
     ],
   };
 

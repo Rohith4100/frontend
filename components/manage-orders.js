@@ -13,13 +13,14 @@ export default function ManageOrders() {
   const [search, setSearch] = useState("");
   const [selectedOrder, setSelectedOrder] =
     useState(null);
-
   const [form, setForm] = useState({
     patient_id: "",
     physician_id: "",
-    test_id: "",
     priority: "Normal",
   });
+
+  const [selectedTests, setSelectedTests] =
+    useState([""]);
 
   useEffect(() => {
     fetchOrders();
@@ -100,59 +101,66 @@ export default function ManageOrders() {
     });
   };
 
-  const createOrder = async () => {
+  const createOrders = async () => {
     if (
       !form.patient_id ||
-      !form.physician_id ||
-      !form.test_id
+      !form.physician_id
     ) {
       alert(
-        "Please select patient, physician and test"
+        "Select patient and physician"
+      );
+      return;
+    }
+
+    const validTests =
+      selectedTests.filter(
+        (test) => test
+      );
+
+    if (
+      validTests.length === 0
+    ) {
+      alert(
+        "Select at least one test"
       );
       return;
     }
 
     try {
-      const response = await apiFetch(
-        `${API_BASE}/test-orders`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            patient_id: Number(
-              form.patient_id
-            ),
-            physician_id: Number(
-              form.physician_id
-            ),
-            test_id: Number(
-              form.test_id
-            ),
-            priority: form.priority,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(
-          data.detail ||
-          "Failed to create order"
+      for (const testId of validTests) {
+        await apiFetch(
+          `${API_BASE}/test-orders`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              patient_id: Number(
+                form.patient_id
+              ),
+              physician_id: Number(
+                form.physician_id
+              ),
+              test_id:
+                Number(testId),
+              priority:
+                form.priority,
+            }),
+          }
         );
-        return;
       }
 
       alert(
-        "Test Order Created Successfully"
+        `${validTests.length} Orders Created`
       );
 
+      setSelectedTests([""]);
+
       resetForm();
+
       fetchOrders();
     } catch (error) {
       console.error(error);
     }
   };
-
   const getPatientName = (id) => {
     const patient = patients.find(
       (p) => p.id === id
@@ -213,6 +221,12 @@ export default function ManageOrders() {
       String(order.id).includes(query)
     );
   });
+  const availableTests = tests.filter(
+  (test) =>
+    !selectedTests.includes(
+      String(test.id)
+    )
+);
   return (
     <div className={styles.container}>
       {selectedOrder ? (
@@ -377,8 +391,107 @@ export default function ManageOrders() {
                   )
                 )}
               </select>
+              {selectedTests.map(
+                (testId, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <select
+                      className={styles.select}
+                      value={testId}
+                      onChange={(e) => {
+                        const updated = [
+                          ...selectedTests,
+                        ];
 
-              <select
+                        updated[index] =
+                          e.target.value;
+
+                        setSelectedTests(
+                          updated
+                        );
+                      }}
+                      style={{ flex: 1 }}
+                    >
+                      <option value="">
+                        Select Test
+                      </option>
+
+                      {tests
+                        .filter(
+                          (test) =>
+                            !selectedTests.includes(
+                              String(test.id)
+                            ) ||
+                            String(test.id) ===
+                            testId
+                        )
+                        .map((test) => (
+                          <option
+                            key={test.id}
+                            value={test.id}
+                          >
+                            {test.test_name}
+                          </option>
+                        ))}
+                    </select>
+
+                    {selectedTests.length > 1 && (
+                      <button
+                        type="button"
+                        className={styles.deleteBtn}
+                        onClick={() => {
+                          const updated =
+                            selectedTests.filter(
+                              (_, i) =>
+                                i !== index
+                            );
+
+                          setSelectedTests(
+                            updated
+                          );
+                        }}
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                )
+              )}
+              <button
+                className={styles.button}
+                type="button"
+                disabled={
+                  availableTests.length === 0
+                }
+                onClick={() =>{
+                  const hasEmpty =
+                  selectedTests.some(
+                    (t) => t === ""
+                  );
+
+                  if (hasEmpty) {
+                    alert(
+                      "Select the current test first"
+                    );
+                    return;
+                  }
+                  setSelectedTests([
+                    ...selectedTests,
+                    "",
+                  ])
+                }}
+              >
+                {availableTests.length === 0
+                  ? "All Tests Added"
+                  : "+ Add Test"}
+              </button>
+              {/* <select
                 className={styles.select}
                 value={form.test_id}
                 onChange={(e) =>
@@ -401,7 +514,7 @@ export default function ManageOrders() {
                     {test.test_name}
                   </option>
                 ))}
-              </select>
+              </select> */}
 
               <select
                 className={styles.select}
@@ -430,7 +543,7 @@ export default function ManageOrders() {
 
             <button
               className={styles.button}
-              onClick={createOrder}
+              onClick={createOrders}
             >
               Create Order
             </button>
@@ -516,32 +629,32 @@ export default function ManageOrders() {
 
                       <td>
                         <span
-                        className={`${stylesd.statusBadge}
+                          className={`${stylesd.statusBadge}
                             ${order.priority === "Normal"
-                            ? stylesd.verifiedStatus
-                            : order.priority === "STAT"
-                              ? stylesd.rejectedStatus
-                              :stylesd.completedStatus
-                          }`}
-                      >
-                        {order.priority}
-                      </span>
+                              ? stylesd.verifiedStatus
+                              : order.priority === "STAT"
+                                ? stylesd.rejectedStatus
+                                : stylesd.completedStatus
+                            }`}
+                        >
+                          {order.priority}
+                        </span>
                       </td>
                       <td>
-                      <span
-                        className={`${stylesd.statusBadge}
+                        <span
+                          className={`${stylesd.statusBadge}
                             ${order.status === "Verified"
-                            ? stylesd.verifiedStatus
-                            : order.status === "Rejected"
-                              ? stylesd.rejectedStatus
-                              : order.status === "Completed"
-                                ? stylesd.completedStatus
-                                : stylesd.newStatus
-                          }`}
-                      >
-                        {order.status}
-                      </span>
-                    </td>
+                              ? stylesd.verifiedStatus
+                              : order.status === "Rejected"
+                                ? stylesd.rejectedStatus
+                                : order.status === "Completed"
+                                  ? stylesd.completedStatus
+                                  : stylesd.newStatus
+                            }`}
+                        >
+                          {order.status}
+                        </span>
+                      </td>
 
                       <td>
                         <button
