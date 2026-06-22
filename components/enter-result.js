@@ -1,5 +1,5 @@
 "use client";
-
+import stylesd from "@/components/dashboard.module.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/components/manage.module.css";
@@ -147,112 +147,278 @@ export default function EnterResult({
     );
   }
 
+  // return (
+  //   <div className={styles.container}>
+  //     <h1 className={styles.title}>
+  //       Enter Test Results
+  //     </h1>
+
+  //     <div className={styles.card}>
+  //       <h2
+  //         className={
+  //           styles.sectionTitle
+  //         }
+  //       >
+  //         Order #{order.id}
+  //       </h2>
+
+  //       <p>
+  //         Status:
+  //         <strong>
+  //           {" "}
+  //           {order.status}
+  //         </strong>
+  //       </p>
+
+  //       <p>
+  //         Priority:
+  //         <strong>
+  //           {" "}
+  //           {order.priority}
+  //         </strong>
+  //       </p>
+  //     </div>
+
+  //     <div className={styles.card}>
+  //       <h2
+  //         className={
+  //           styles.sectionTitle
+  //         }
+  //       >
+  //         Parameters
+  //       </h2>
+
+  //       <div
+  //         style={{
+  //           display: "grid",
+  //           gap: "15px",
+  //         }}
+  //       >
+  //         {parameters.map(
+  //           (parameter) => (
+  //             <div
+  //               key={
+  //                 parameter.id
+  //               }
+  //             >
+  //               <label>
+  //                 <strong>
+  //                   {
+  //                     parameter.parameter_name
+  //                   }
+  //                 </strong>
+
+  //                 {parameter.unit &&
+  //                   ` (${parameter.unit})`}
+
+  //                 {parameter.reference_range &&
+  //                   `  |  Reference: ${parameter.reference_range}       `}
+  //               </label>
+
+  //               <input
+  //                 className={
+  //                   styles.input
+  //                 }
+  //                 type="text"
+  //                 value={
+  //                   values[
+  //                   parameter.id
+  //                   ] || ""
+  //                 }
+  //                 onChange={(
+  //                   e
+  //                 ) =>
+  //                   handleChange(
+  //                     parameter.id,
+  //                     e.target.value
+  //                   )
+  //                 }
+  //                 placeholder="Enter Result"
+  //               />
+  //             </div>
+  //           )
+  //         )}
+  //       </div>
+
+  //       <br />
+
+  //       <button
+  //         className={
+  //           styles.button
+  //         }
+  //         onClick={
+  //           submitResults
+  //         }
+  //       >
+  //         Submit Results
+  //       </button>
+  //     </div>
+  //   </div>
+  // );
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>
-        Enter Test Results
-      </h1>
+      <div className={stylesd.dashboardHeading}>
+        <div>
+          <h1 className={stylesd.dashboardTitle}>
+            Enter Test Results
+          </h1>
 
-      <div className={styles.card}>
-        <h2
-          className={
-            styles.sectionTitle
-          }
-        >
-          Order #{order.id}
-        </h2>
-
-        <p>
-          Status:
-          <strong>
-            {" "}
-            {order.status}
-          </strong>
-        </p>
-
-        <p>
-          Priority:
-          <strong>
-            {" "}
-            {order.priority}
-          </strong>
-        </p>
+          <p className={stylesd.dashboardSubtitle}>
+            Record laboratory findings for the selected order
+          </p>
+        </div>
       </div>
 
       <div className={styles.card}>
         <h2
           className={
-            styles.sectionTitle
+            stylesd.dashboardTitle
           }
         >
-          Parameters
+          Order Information
         </h2>
 
-        <div
-          style={{
-            display: "grid",
-            gap: "15px",
-          }}
-        >
-          {parameters.map(
-            (parameter) => (
-              <div
-                key={
-                  parameter.id
-                }
+        <div className={styles.patientCard}>
+          <div className={styles.infoBox}>
+            <div className={styles.infoLabel}>
+              Order ID
+            </div>
+
+            <div className={styles.infoValue}>
+              #{order.id}
+            </div>
+          </div>
+
+          <div className={styles.infoBox}>
+            <div className={styles.infoLabel}>
+              Status
+            </div>
+
+            <div className={styles.infoValue}>
+              <span
+                className={`${stylesd.statusBadge}
+              ${order.status ===
+                    "Rejected"
+                    ? stylesd.rejectedStatus
+                    : order.status ===
+                      "Verified"
+                      ? stylesd.verifiedStatus
+                      : stylesd.newStatus
+                  }`}
               >
-                <label>
-                  <strong>
+                {order.status}
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.infoBox}>
+            <div className={styles.infoLabel}>
+              Priority
+            </div>
+
+            <div className={styles.infoValue}>
+              {order.priority}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.card}>
+        <h2
+          className={
+            stylesd.dashboardTitle
+          }
+        >
+          Test Parameters
+        </h2>
+
+        <table
+          className={
+            stylesd.dashboardTable
+          }
+        >
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Unit</th>
+              <th>Reference Range</th>
+              <th>Result Value</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {parameters.map(
+              (parameter) => (
+                <tr
+                  key={
+                    parameter.id
+                  }
+                >
+                  <td>
                     {
                       parameter.parameter_name
                     }
-                  </strong>
+                  </td>
 
-                  {parameter.unit &&
-                    ` (${parameter.unit})`}
+                  <td>
+                    {parameter.unit ||
+                      "-"}
+                  </td>
 
-                  {parameter.reference_range &&
-                    `  |  Reference: ${parameter.reference_range}       `}
-                </label>
+                  <td>
+                    {parameter.reference_range ||
+                      "-"}
+                  </td>
 
-                <input
-                  className={
-                    styles.input
-                  }
-                  type="text"
-                  value={
-                    values[
-                    parameter.id
-                    ] || ""
-                  }
-                  onChange={(
-                    e
-                  ) =>
-                    handleChange(
-                      parameter.id,
-                      e.target.value
-                    )
-                  }
-                  placeholder="Enter Result"
-                />
-              </div>
-            )
-          )}
-        </div>
+                  <td>
+                    <input
+                      className={
+                        styles.input
+                      }
+                      type="text"
+                      value={
+                        values[
+                        parameter.id
+                        ] || ""
+                      }
+                      onChange={(
+                        e
+                      ) =>
+                        handleChange(
+                          parameter.id,
+                          e.target.value
+                        )
+                      }
+                      placeholder="Enter value"
+                    />
+                  </td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </table>
 
-        <br />
-
-        <button
-          className={
-            styles.button
-          }
-          onClick={
-            submitResults
-          }
+        <div
+          style={{
+            display: "flex",
+            justifyContent:
+              "center",
+            marginTop: "25px",
+          }}
         >
-          Submit Results
-        </button>
+          <button
+            className={
+              styles.button
+            }
+            onClick={
+              submitResults
+            }
+          >
+            Submit Results
+          </button>
+        </div>
       </div>
     </div>
   );
+
 }

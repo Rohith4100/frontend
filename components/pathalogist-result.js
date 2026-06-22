@@ -1,5 +1,5 @@
 "use client";
-
+import stylesd from "@/components/dashboard.module.css";
 import { useEffect, useState } from "react";
 import styles from "@/components/manage.module.css";
 import { apiFetch } from "@/utils/api";
@@ -87,33 +87,209 @@ export default function Results({ status, head }) {
     );
   };
 
-  return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>
-        {head}
-      </h1>
+  // return (
+  //   <div className={styles.container}>
+  //     <h1 className={styles.title}>
+  //       {head}
+  //     </h1>
 
-      <div className={styles.card}>
-        <div
+  //     <div className={styles.card}>
+  //       <div
+  //         style={{
+  //           display: "flex",
+  //           justifyContent:
+  //             "space-between",
+  //           alignItems: "center",
+  //           marginBottom: "20px",
+  //         }}
+  //       >
+  //         <h2 className={styles.sectionTitle}>
+  //           Submitted Results
+  //         </h2>
+
+  //         <button
+  //           className={styles.refreshBtn}
+  //           onClick={fetchResults}
+  //         >
+  //           Refresh
+  //         </button>
+  //       </div>
+  //       <input
+  //         className={styles.searchInput}
+  //         type="search"
+  //         placeholder="Search result..."
+  //         value={search}
+  //         onChange={(e) =>
+  //           setSearch(e.target.value)
+  //         }
+  //       />
+  //       <div className={styles.tableWrapper}>
+  //         <table className={styles.table}>
+  //           <thead>
+  //             <tr>
+  //               <th>Result ID</th>
+  //               <th>Order ID</th>
+  //               <th>Status</th>
+  //               <th>Verified By</th>
+  //               <th>Action</th>
+  //             </tr>
+  //           </thead>
+
+  //           <tbody>
+  //             {results.length > 0 ? (
+  //               results.filter((result) =>
+  //                 result.id
+  //                   .toString()
+  //                   .includes(search) ||
+  //                 result.order_id
+  //                   .toString()
+  //                   .includes(search) ||
+  //                 result.status
+  //                   .toLowerCase()
+  //                   .includes(search.toLowerCase())
+  //               )
+
+  //                 .map((result) => (
+  //                   <tr key={result.id}>
+  //                     <td>{result.id}</td>
+
+  //                     <td>
+  //                       {result.order_id}
+  //                     </td>
+
+  //                     <td>
+  //                       {result.status}
+  //                     </td>
+
+  //                     <td>
+  //                       {result.verified_by ||
+  //                         "-"}
+  //                     </td>
+
+  //                     <td>
+  //                       {result.status ===
+  //                         "Pending" ? (
+  //                         <button
+  //                           className={styles.editBtn}
+  //                           onClick={() =>
+  //                             router.push(
+  //                               `/pathologist/review-result/${result.id}`
+  //                             )
+  //                           }
+  //                         >
+  //                           Review
+  //                         </button>
+  //                       ) : (
+  //                         <button
+  //                           className={styles.editBtn}
+  //                           onClick={() =>
+  //                             router.push(
+  //                               `/pathologist/review-result/${result.id}`
+  //                             )
+  //                           }
+  //                         >
+  //                           View
+  //                         </button>
+  //                       )}
+  //                     </td>
+  //                   </tr>
+  //                 ))
+  //             ) : (
+  //               <tr>
+  //                 <td
+  //                   colSpan="5"
+  //                   style={{
+  //                     textAlign:
+  //                       "center",
+  //                     padding: "20px",
+  //                   }}
+  //                 >
+  //                   No Results Found
+  //                 </td>
+  //               </tr>
+  //             )}
+  //           </tbody>
+  //         </table>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
+return (
+  <div className={styles.container}>
+    <div className={stylesd.dashboardHeading}>
+      <div>
+        <h1 className={stylesd.dashboardTitle}>
+          {head}
+        </h1>
+
+        <p className={stylesd.dashboardSubtitle}>
+          Review laboratory results
+        </p>
+      </div>
+    </div>
+
+    <div className={stylesd.statsGrid}>
+
+      <div
+        className={`${stylesd.statCard}
+        ${
+          status === "Verified"
+            ? stylesd.verifiedCard
+            : status === "Rejected"
+            ? stylesd.rejectedCard
+            : stylesd.pendingCard
+        }`}
+      >
+        <div className={stylesd.statLabel}>
+          Total Results
+        </div>
+
+        <div className={stylesd.statValue}>
+          {results.length}
+        </div>
+      </div>
+
+    </div>
+
+    <div className={styles.card}>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent:
+            "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+          flexWrap: "wrap",
+          gap: "10px",
+        }}
+      >
+        <h2
+          className={
+            stylesd.dashboardSectionTitle
+          }
+        >
+          Submitted Results
+        </h2>
+
+        <button
+          className={styles.refreshBtn}
+          onClick={fetchResults}
+        >
+          Refresh
+        </button>
+      </div>
+
+      <div>
+        <span
+          className={styles.sub_title}
           style={{
-            display: "flex",
-            justifyContent:
-              "space-between",
-            alignItems: "center",
-            marginBottom: "20px",
+            marginRight: "20px",
           }}
         >
-          <h2 className={styles.sectionTitle}>
-            Submitted Results
-          </h2>
+          Search
+        </span>
 
-          <button
-            className={styles.refreshBtn}
-            onClick={fetchResults}
-          >
-            Refresh
-          </button>
-        </div>
         <input
           className={styles.searchInput}
           type="search"
@@ -123,21 +299,28 @@ export default function Results({ status, head }) {
             setSearch(e.target.value)
           }
         />
-        <div className={styles.tableWrapper}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Result ID</th>
-                <th>Order ID</th>
-                <th>Status</th>
-                <th>Verified By</th>
-                <th>Action</th>
-              </tr>
-            </thead>
+      </div>
 
-            <tbody>
-              {results.length > 0 ? (
-                results.filter((result) =>
+      <table
+        className={
+          stylesd.dashboardTable
+        }
+      >
+        <thead>
+          <tr>
+            <th>Result ID</th>
+            <th>Order ID</th>
+            <th>Status</th>
+            <th>Verified By</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {results.length > 0 ? (
+            results
+              .filter(
+                (result) =>
                   result.id
                     .toString()
                     .includes(search) ||
@@ -146,72 +329,82 @@ export default function Results({ status, head }) {
                     .includes(search) ||
                   result.status
                     .toLowerCase()
-                    .includes(search.toLowerCase())
-                )
+                    .includes(
+                      search.toLowerCase()
+                    )
+              )
+              .map((result) => (
+                <tr
+                  key={result.id}
+                >
+                  <td>
+                    {result.id}
+                  </td>
 
-                  .map((result) => (
-                    <tr key={result.id}>
-                      <td>{result.id}</td>
+                  <td>
+                    {result.order_id}
+                  </td>
 
-                      <td>
-                        {result.order_id}
-                      </td>
+                  <td>
+                    <span
+                      className={`${stylesd.statusBadge}
+                      ${
+                        result.status ===
+                        "Verified"
+                          ? stylesd.verifiedStatus
+                          : result.status ===
+                            "Rejected"
+                          ? stylesd.rejectedStatus
+                          : stylesd.completedStatus
+                      }`}
+                    >
+                      {result.status}
+                    </span>
+                  </td>
 
-                      <td>
-                        {result.status}
-                      </td>
+                  <td>
+                    {result.verified_by ||
+                      "-"}
+                  </td>
 
-                      <td>
-                        {result.verified_by ||
-                          "-"}
-                      </td>
-
-                      <td>
-                        {result.status ===
-                          "Pending" ? (
-                          <button
-                            className={styles.editBtn}
-                            onClick={() =>
-                              router.push(
-                                `/pathologist/review-result/${result.id}`
-                              )
-                            }
-                          >
-                            Review
-                          </button>
-                        ) : (
-                          <button
-                            className={styles.editBtn}
-                            onClick={() =>
-                              router.push(
-                                `/pathologist/review-result/${result.id}`
-                              )
-                            }
-                          >
-                            View
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="5"
-                    style={{
-                      textAlign:
-                        "center",
-                      padding: "20px",
-                    }}
-                  >
-                    No Results Found
+                  <td>
+                    <button
+                      className={
+                        styles.button
+                      }
+                      onClick={() =>
+                        router.push(
+                          `/pathologist/review-result/${result.id}`
+                        )
+                      }
+                    >
+                      {result.status ===
+                      "Pending"
+                        ? "Review"
+                        : "View"}
+                    </button>
                   </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+              ))
+          ) : (
+            <tr>
+              <td
+                colSpan="5"
+                style={{
+                  textAlign:
+                    "center",
+                  padding: "30px",
+                  color:
+                    "#64748b",
+                }}
+              >
+                No Results Found
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
-  );
+  </div>
+);
 }

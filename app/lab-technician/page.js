@@ -159,7 +159,7 @@ export default function TechnicianDashboard() {
           </div>
         </div>
 
-        <div
+        {/* <div
           className={`${stylesd.statCard}
           ${stylesd.staffCard}`}
         >
@@ -178,7 +178,7 @@ export default function TechnicianDashboard() {
           >
             {inProgressOrders}
           </div>
-        </div>
+        </div> */}
 
         <div
           className={`${stylesd.statCard}
