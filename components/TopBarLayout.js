@@ -8,25 +8,19 @@ export default function DashboardLayout({
   return (
     <div
       style={{
-        display: "flex",
-      },
-      {
-        flexDirection: "row"
-      }
-      }
+        minHeight: "100vh",
+        background: "#f1f5f9",
+      }}
     >
       <TopBar />
 
-      <div
+      <main
         style={{
-          flex: 1,
-          padding: "20px",
-          height: "calc(100%-250px)",
-          minHeight: 0
+          padding: "24px",
         }}
       >
         {children}
-      </div>
+      </main>
     </div>
   );
 }

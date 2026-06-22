@@ -2,12 +2,16 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import styles from "./sidebar.module.css"
+import styles from "./sidebar.module.css";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 export default function Sidebar() {
   const router = useRouter();
 
   const [role, setRole] = useState(null);
 
+
+  const pathname = usePathname();
   useEffect(() => {
     setRole(
       localStorage.getItem("role")
@@ -45,8 +49,8 @@ export default function Sidebar() {
         path: "/admin/test-parameters"
       },
       {
-        label : "Test Report",
-        path : "/admin/reports"
+        label: "Test Report",
+        path: "/admin/reports"
       },
       {
         label: "Monitor Orders",
@@ -125,44 +129,46 @@ export default function Sidebar() {
   };
 
   return (
-    <div
-      // className={styles.Sidebar}
-      style={{
-        width: "250px",
-        height: "100vh",
-        position: "fixed",
-        left: 0,
-        top: 0,
-        backgroundColor: "#1f2937",
-        color: "white",
-        padding: "20px",
-        overflowY: "auto",
-      }}
-    >
 
-      <h2>CrenueLab</h2>
-
-      <hr />
-
-      {menus[role]?.map((item) => (
-        <div
-          // className={styles.sidebar}
-          key={item.path}
-          style={{
-            marginTop: "20px",
-          }}
-        >
-          <Link
-            href={item.path}
-            style={{
-              color: "white",
-              textDecoration: "none",
-            }}
-          >
-            {item.label}
-          </Link>
+    <div className={styles.sidebar}>
+      <div>
+        <div className={styles.logoContainer}>
+          <Image
+            src="/crenuelab.png"
+            alt="CrenueLab Logo"
+            width={180}
+            height={80}
+            priority
+            className={styles.logoImage}
+          />
         </div>
-      ))}
+
+        <hr className={styles.divider} />
+
+        {menus[role]?.map((item) => (
+          <div
+            key={item.path}
+            className={styles.menuItem}
+          >
+            {/* <Link
+              href={item.path}
+              className={styles.link}
+            >
+              {item.label}
+            </Link> */}
+            <Link
+              href={item.path}
+              className={
+                pathname === item.path
+                  ? styles.activeLink
+                  : styles.link
+              }
+            >
+              {item.label}
+            </Link>
+          </div>
+        ))}
+      </div>
 
       <button
         className={styles.logoutBtn}
@@ -171,6 +177,5 @@ export default function Sidebar() {
         Logout
       </button>
     </div>
-
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -124,7 +124,7 @@ export default function TopBar() {
       },
       {
         label: "Completed Orders",
-        path:"/lab-technician/completed-orders"
+        path: "/lab-technician/completed-orders"
       }
     ],
   };
@@ -134,7 +134,15 @@ export default function TopBar() {
       <div className={styles.logo}>
         CrenueLab
       </div>
-
+      {/* <div className={styles.logo}>
+        <Image
+          src="/crenuelab.png"
+          alt="CrenueLab"
+          width={180}
+          height={60}
+          priority
+        />
+      </div> */}
       <div className={styles.menuContainer}>
         {menus[role]?.map((item) => (
           <Link

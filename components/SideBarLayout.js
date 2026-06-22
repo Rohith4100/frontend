@@ -17,7 +17,7 @@ export default function DashboardLayout({
         style={{
           flex: 1,
           padding: "20px",
-          width: "calc(100%-250px)",
+          // width: "calc(100%-250px)",
           marginLeft: "250px",
           minWidth: 0
         }}
