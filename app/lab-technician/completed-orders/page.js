@@ -1,10 +1,10 @@
 import CompletedOrders from "@/components/completed-orders";
-import protectedRoute from "@/components/protectedRoute";
+import ProtectedRoute from "@/components/protectedRoute";
 export default function Page() {
   return (
-  // <protectedRoute role="Lab Technician">
+  <ProtectedRoute role="Lab Technician">
     <CompletedOrders />
-  // </protectedRoute>
+  </ProtectedRoute>
   );
   
 }

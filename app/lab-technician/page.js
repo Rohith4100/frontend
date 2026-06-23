@@ -5,15 +5,23 @@ import { apiFetch } from "@/utils/api";
 import { API_BASE } from "@/utils/constants";
 import styles from "@/components/manage.module.css";
 import stylesd from "@/components/dashboard.module.css";
-
+import { useRouter } from "next/navigation";
 export default function TechnicianDashboard() {
   const [orders, setOrders] = useState([]);
   const [patients, setPatients] =
     useState([]);
   const [tests, setTests] =
     useState([]);
+  const router = useRouter();
+   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
 
-  useEffect(() => {
+    if (!token || role !== "Lab Technician") {
+      router.push("/login");
+      return;
+    }
+
     fetchData();
   }, []);
 

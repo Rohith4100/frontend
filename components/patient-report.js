@@ -89,6 +89,13 @@ export default function PatientReports() {
       console.error(error);
     }
   };
+  const tot_amt_per_visit = (visit_date) => {
+    var tot = 0;
+    reports[visit_date].map(test => {
+      tot += test.test_price;
+    });
+    return tot;
+  }
 
   return (
     <div className={styles.container}>
@@ -290,6 +297,57 @@ export default function PatientReports() {
                         "10px 20px 20px 20px",
                     }}
                   >
+                    <div
+                      className={styles.reportCard}
+                      style={{
+                        marginBottom: "20px",
+                        display: "flex",
+                        justifyContent: "space-around",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div>
+                        <strong
+                        style={{
+                          fontSize:"25px",
+                          color:"#1e293b"
+                        }}
+                        >Total Tests</strong>
+                        <br />
+                        <br />
+                        <strong
+                        style={{
+                          fontSize:"25px",
+                          color:"#1e293b",
+                          marginLeft:"58px"
+                        }}
+                        >
+                          {reports[visitDate].length}
+                        </strong>
+                        
+                      </div>
+
+                      <div>
+                        <strong
+                         style={{
+                          fontSize:"25px",
+                          color:"#1e293b"
+                        }}
+                        >Total Bill</strong>
+                        <br />
+                        <br />
+                        <span
+                          style={{
+                            color: "#16a34a",
+                            fontSize: "24px",
+                            fontWeight: "700",
+                            marginLeft: "10px"
+                          }}
+                        >
+                          ₹{tot_amt_per_visit(visitDate)}
+                        </span>
+                      </div>
+                    </div>
                     {reports[
                       visitDate
                     ].map(
@@ -316,6 +374,18 @@ export default function PatientReports() {
                               {
                                 test.test_name
                               }
+                              <span
+                                style={{
+                                  background: "#dcfce7",
+                                  color: "#15803d",
+                                  padding: "8px 14px",
+                                  borderRadius: "8px",
+                                  fontWeight: "700",
+                                  marginLeft: "10px"
+                                }}
+                              >
+                                ₹{test.test_price}
+                              </span>
                             </h3>
 
                             <div
@@ -405,205 +475,14 @@ export default function PatientReports() {
                         </div>
                       )
                     )}
+                    
                   </div>
                 )}
             </div>
           )
         )}
 
-      {/* Visits */}
 
-      {/* {Object.keys(reports).length >
-        0 &&
-        Object.keys(reports).map(
-          (visitDate) => (
-            <div
-              key={visitDate}
-              className={
-                styles.card
-              }
-            >
-              <div
-                style={{
-                  display:
-                    "flex",
-                  justifyContent:
-                    "space-between",
-                  alignItems:
-                    "center",
-                  cursor:
-                    "pointer",
-                }}
-                onClick={() =>
-                  setExpandedVisit(
-                    expandedVisit ===
-                      visitDate
-                      ? null
-                      : visitDate
-                  )
-                }
-              >
-                <h2
-                  className={styles.sub_title}
-                >
-                  Visit:{" "}
-                  {visitDate}
-                </h2>
-                <button
-                  className={styles.visitDownloadBtn}
-                  onClick={(e) => {
-                    e.stopPropagation();
-
-                    downloadVisitPDF(
-                      patient.id,
-                      visitDate
-                    );
-                  }}
-                >
-                  Download Visit Report
-                </button>
-                <div>
-                  (
-                  {
-                    reports[
-                      visitDate
-                    ].length
-                  }{" "}
-                  Tests)
-                  {" "}
-                  {expandedVisit ===
-                    visitDate
-                    ? "▲"
-                    : "▼"}
-                </div>
-              </div>
-
-              {expandedVisit ===
-                visitDate && (
-                  <div
-                    style={{
-                      marginTop:
-                        "20px",
-                    }}
-                  >
-                    {reports[
-                      visitDate
-                    ].map(
-                      (
-                        test,
-                        index
-                      ) => (
-                        <div
-                          key={
-                            index
-                          }
-                          className={styles.reportCard}
-                        >
-                          <h3
-                            className={styles.sub_title}>
-                            {
-                              test.test_name
-                            }
-                          </h3>
-
-                          <p>
-                            <strong
-                              className={styles.topic}
-                            >
-                              Entered
-                              By:
-                            </strong>{" "}
-                            {
-                              test.entered_by
-                            }
-                          </p>
-
-                          <p>
-                            <strong
-                              className={styles.topic}
-                            >
-                              Verified
-                              By:
-                            </strong>{" "}
-                            {
-                              test.verified_by
-                            }
-                          </p>
-
-                          <table
-                            className={
-                              styles.table
-                            }
-                          >
-                            <thead>
-                              <tr>
-                                <th>
-                                  Parameter
-                                </th>
-
-                                <th>
-                                  Value
-                                </th>
-
-                                <th>
-                                  Unit
-                                </th>
-
-                                <th>
-                                  Reference
-                                  Range
-                                </th>
-                              </tr>
-                            </thead>
-
-                            <tbody>
-                              {test.parameters.map(
-                                (
-                                  parameter,
-                                  i
-                                ) => (
-                                  <tr
-                                    key={
-                                      i
-                                    }
-                                  >
-                                    <td>
-                                      {
-                                        parameter.parameter
-                                      }
-                                    </td>
-
-                                    <td>
-                                      {
-                                        parameter.value
-                                      }
-                                    </td>
-
-                                    <td>
-                                      {
-                                        parameter.unit
-                                      }
-                                    </td>
-
-                                    <td>
-                                      {
-                                        parameter.reference
-                                      }
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                            </tbody>
-                          </table>
-
-                        </div>
-                      )
-                    )}
-                  </div>
-                )}
-            </div>
-          )
-        )} */}
     </div>
   );
 }

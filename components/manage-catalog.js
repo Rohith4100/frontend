@@ -13,6 +13,7 @@ export default function ManageCatalog() {
   const [form, setForm] = useState({
     test_name: "",
     description: "",
+    price: "",
   });
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export default function ManageCatalog() {
     setForm({
       test_name: "",
       description: "",
+      price: "",
     });
   };
 
@@ -49,7 +51,10 @@ export default function ManageCatalog() {
       alert("Test Name is required");
       return false;
     }
-
+    if (!form.price || Number(form.price) <= 0) {
+      alert("Valid price required");
+      return false;
+    }
     return true;
   };
 
@@ -147,6 +152,7 @@ export default function ManageCatalog() {
     setForm({
       test_name: test.test_name || "",
       description: test.description || "",
+      price: test.price || "",
     });
 
     window.scrollTo({
@@ -206,6 +212,16 @@ export default function ManageCatalog() {
               <div className={styles.infoValue}>
                 {selectedTest.description ||
                   "No Description"}
+              </div>
+
+            </div>
+            <div className={styles.infoBox}>
+              <div className={styles.infoLabel}>
+                Price
+              </div>
+
+              <div className={styles.infoValue}>
+                ₹{selectedTest.price}
               </div>
             </div>
           </div>
@@ -269,6 +285,19 @@ export default function ManageCatalog() {
                   })
                 }
               />
+              <input
+                className={styles.input}
+                type="number"
+                min="0"
+                placeholder="Price"
+                value={form.price}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    price: e.target.value,
+                  })
+                }
+              />
             </div>
 
             <br />
@@ -312,38 +341,38 @@ export default function ManageCatalog() {
                 marginBottom: "20px",
               }}
             > */}
-              <div className={stylesd.toolbar}>
-                <div>
-                  <h2 className={stylesd.dashboardTitle}>
-                    Test Catalog
-                  </h2>
+            <div className={stylesd.toolbar}>
+              <div>
+                <h2 className={stylesd.dashboardTitle}>
+                  Test Catalog
+                </h2>
 
-                  <p className={stylesd.dashboardSubtitle}>
-                    Available laboratory investigations
-                  </p>
-                </div>
+                <p className={stylesd.dashboardSubtitle}>
+                  Available laboratory investigations
+                </p>
+              </div>
 
-                <button
-                  className={styles.refreshBtn}
-                  onClick={fetchTests}
-                >
-                  Refresh
-                </button>
+              <button
+                className={styles.refreshBtn}
+                onClick={fetchTests}
+              >
+                Refresh
+              </button>
               {/* </div> */}
             </div>
             <span
               className={styles.sub_title}
               style={
-                  {marginTop:"-6px"},
-                  {marginLeft:"5px"}
+                { marginTop: "-6px" },
+                { marginLeft: "5px" }
               }
-              >Search</span>
+            >Search</span>
             <div className={stylesd.toolbar}>
-              
+
               <input
                 className={styles.searchInput}
                 type="search"
-                style={{marginTop:"5px"}}
+                style={{ marginTop: "5px" }}
                 placeholder="Search by test name..."
                 value={search}
                 onChange={(e) =>
@@ -357,6 +386,7 @@ export default function ManageCatalog() {
                   <tr>
                     <th>ID</th>
                     <th>Test Name</th>
+                    <th>Price</th>
                     <th>Description</th>
                     <th>Actions</th>
                   </tr>
@@ -381,7 +411,9 @@ export default function ManageCatalog() {
                           <td>
                             {test.test_name}
                           </td>
-
+                          <td>
+                            ₹{test.price}
+                          </td>
                           <td>
                             {test.description}
                           </td>
@@ -433,7 +465,7 @@ export default function ManageCatalog() {
                   ) : (
                     <tr>
                       <td
-                        colSpan="4"
+                        colSpan="5"
                         style={{
                           textAlign:
                             "center",

@@ -114,6 +114,10 @@ export default function Sidebar() {
         label: "Rejected Results",
         path: "/pathologist/rejected-results",
       },
+      {
+        label: "Patient Reports",
+        path: "/pathologist/patient-reports",
+      },
     ],
 
     // "Lab Technician": [

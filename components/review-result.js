@@ -144,7 +144,7 @@ export default function ReviewResult({
       alert("Result Rejected");
 
       router.push(
-        "/pathologist/-results"
+        "/pathologist/pending-results"
       );
     } catch (error) {
       console.error(error);

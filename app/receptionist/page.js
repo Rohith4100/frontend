@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { apiFetch } from "@/utils/api";
 import { API_BASE } from "@/utils/constants";
 import styles from "@/components/dashboard.module.css";
-
+import { useRouter } from "next/navigation";
 export default function ReceptionistDashboard() {
   const [stats, setStats] = useState({
     patients: 0,
@@ -12,12 +12,25 @@ export default function ReceptionistDashboard() {
     pending: 0,
     completed: 0,
   });
-
+  const router=useRouter();
   const [orders, setOrders] = useState([]);
   const [patients, setPatients] = useState([]);
   const [physicians, setPhysicians] = useState([]);
   const [tests, setTests] = useState([]);
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    if (!token || role !== "Receptionist") {
+      router.push("/login");
+      return;
+    }
+
+    // setName(
+    //   localStorage.getItem("name") ||
+    //   "Receptionist"
+    // );
+
     loadDashboard();
     fetchPhysicians();
     fetchTests();
@@ -97,28 +110,28 @@ export default function ReceptionistDashboard() {
 
 
   const fetchPhysicians = async () => {
-  const response = await apiFetch(
-    `${API_BASE}/staffs`
-  );
+    const response = await apiFetch(
+      `${API_BASE}/staffs`
+    );
 
-  const data = await response.json();
+    const data = await response.json();
 
-  setPhysicians(
-    data.filter(
-      (staff) => staff.role === "Physician"
-    )
-  );
-};
+    setPhysicians(
+      data.filter(
+        (staff) => staff.role === "Physician"
+      )
+    );
+  };
 
-const fetchTests = async () => {
-  const response = await apiFetch(
-    `${API_BASE}/test-catalog`
-  );
+  const fetchTests = async () => {
+    const response = await apiFetch(
+      `${API_BASE}/test-catalog`
+    );
 
-  const data = await response.json();
+    const data = await response.json();
 
-  setTests(data);
-};
+    setTests(data);
+  };
 
 
 
@@ -179,7 +192,7 @@ const fetchTests = async () => {
       <div className={styles.dashboardGrid}>
         <div className={styles.card}>
           <h2 className={styles.dashboardTitle}
-          style={{marginBottom:"15px"}}>
+            style={{ marginBottom: "15px" }}>
             Today's Activity
           </h2>
 
@@ -256,9 +269,9 @@ const fetchTests = async () => {
       </div>
       <div className={styles.card}>
         <h2 className={styles.dashboardTitle}
-        style={{
-          marginBottom:"15px"
-        }}>
+          style={{
+            marginBottom: "15px"
+          }}>
           Recent Test Orders
         </h2>
 

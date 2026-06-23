@@ -8,12 +8,59 @@ import stylesd from "@/components/dashboard.module.css"
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [filter, setFilter] = useState("All");
+  const [patients, setPatients] = useState([]);
+  const [tests, setTests] = useState([]);
 
   const [search, setSearch] = useState("");
   useEffect(() => {
     fetchOrders();
+    fetchPatients();
+    fetchTests();
   }, []);
+  const fetchTests = async () => {
+    try {
+      const response = await apiFetch(
+        `${API_BASE}/test-catalog`
+      );
 
+      const data = await response.json();
+
+      setTests(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchPatients = async () => {
+    try {
+      const response = await apiFetch(
+        `${API_BASE}/patients`
+      );
+
+      const data = await response.json();
+
+      setPatients(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const getPatientName = (patientId) => {
+    const patient = patients.find(
+      (p) => p.id === patientId
+    );
+
+    return patient
+      ? `${patient.first_name} ${patient.last_name}`
+      : "Unknown";
+  };
+  const getTestName = (testId) => {
+    const test = tests.find(
+      (t) => t.id === testId
+    );
+
+    return test
+      ? test.test_name
+      : "Unknown";
+  };
   const fetchOrders = async () => {
     try {
       const response = await apiFetch(
@@ -147,10 +194,10 @@ export default function AdminOrders() {
         </div>
         <span
           className={styles.sub_title}
-          style={{marginLeft:"4px"}}
-          >Search</span>
+          style={{ marginLeft: "4px" }}
+        >Search</span>
         <div className={stylesd.toolbar}
-        style={{marginTop:"3px"}}>
+          style={{ marginTop: "3px" }}>
 
           <input
             className={styles.searchInput}
@@ -184,9 +231,9 @@ export default function AdminOrders() {
         <table className={stylesd.dashboardTable}>
           <thead>
             <tr>
-              <th>Order ID</th>
-              <th>Patient ID</th>
-              <th>Test ID</th>
+              {/* <th>Order ID</th> */}
+              <th>Patient Name</th>
+              <th>Test Name</th>
               <th>Priority</th>
               <th>Status</th>
               <th>Order Date</th>
@@ -206,9 +253,9 @@ export default function AdminOrders() {
               .map(
                 (order) => (
                   <tr key={order.id}>
-                    <td>{order.id}</td>
-                    <td>{order.patient_id}</td>
-                    <td>{order.test_id}</td>
+                    {/* <td>{order.id}</td> */}
+                    <td>{getPatientName(order.patient_id)}</td>
+                    <td>{getTestName(order.test_id)}</td>
                     <td>{order.priority}</td>
                     <td>
                       <span
