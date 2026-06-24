@@ -4,7 +4,7 @@ import { useState } from "react";
 import { apiFetch } from "@/utils/api";
 import { API_BASE } from "@/utils/constants";
 import styles from "@/components/manage.module.css";
-export default function PatientReports() {
+export default function PatientReports({ role }) {
   const [phone, setPhone] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [patient, setPatient] = useState(null);
@@ -297,57 +297,62 @@ export default function PatientReports() {
                         "10px 20px 20px 20px",
                     }}
                   >
-                    <div
-                      className={styles.reportCard}
-                      style={{
-                        marginBottom: "20px",
-                        display: "flex",
-                        justifyContent: "space-around",
-                        alignItems: "center",
-                      }}
-                    >
-                      <div>
-                        <strong
+                    {(role === "Receptionist" || role === "Administrator") && (
+                      <div
+                        className={styles.reportCard}
                         style={{
-                          fontSize:"25px",
-                          color:"#1e293b"
+                          marginBottom: "20px",
+                          display: "flex",
+                          justifyContent: "space-around",
+                          alignItems: "center",
                         }}
-                        >Total Tests</strong>
-                        <br />
-                        <br />
-                        <strong
-                        style={{
-                          fontSize:"25px",
-                          color:"#1e293b",
-                          marginLeft:"58px"
-                        }}
-                        >
-                          {reports[visitDate].length}
-                        </strong>
-                        
-                      </div>
+                      >
+                        <div>
+                          <strong
+                            style={{
+                              fontSize: "25px",
+                              color: "#1e293b",
+                            }}
+                          >
+                            Total Bill
+                          </strong>
+                          <br />
+                          <br />
+                          <span
+                            style={{
+                              color: "#16a34a",
+                              fontSize: "24px",
+                              fontWeight: "700",
+                              marginLeft: "10px",
+                            }}
+                          >
+                            ₹{tot_amt_per_visit(visitDate)}
+                          </span>
+                        </div>
 
-                      <div>
-                        <strong
-                         style={{
-                          fontSize:"25px",
-                          color:"#1e293b"
-                        }}
-                        >Total Bill</strong>
-                        <br />
-                        <br />
-                        <span
-                          style={{
-                            color: "#16a34a",
-                            fontSize: "24px",
-                            fontWeight: "700",
-                            marginLeft: "10px"
-                          }}
-                        >
-                          ₹{tot_amt_per_visit(visitDate)}
-                        </span>
+                        <div>
+                          <strong
+                            style={{
+                              fontSize: "25px",
+                              color: "#1e293b",
+                            }}
+                          >
+                            Total Tests
+                          </strong>
+                          <br />
+                          <br />
+                          <strong
+                            style={{
+                              fontSize: "25px",
+                              color: "#1e293b",
+                              marginLeft: "58px",
+                            }}
+                          >
+                            {reports[visitDate].length}
+                          </strong>
+                        </div>
                       </div>
-                    </div>
+                    )}
                     {reports[
                       visitDate
                     ].map(
@@ -374,18 +379,20 @@ export default function PatientReports() {
                               {
                                 test.test_name
                               }
-                              <span
-                                style={{
-                                  background: "#dcfce7",
-                                  color: "#15803d",
-                                  padding: "8px 14px",
-                                  borderRadius: "8px",
-                                  fontWeight: "700",
-                                  marginLeft: "10px"
-                                }}
-                              >
-                                ₹{test.test_price}
-                              </span>
+                              {(role === "Receptionist" || role === "Administrator") && (
+                                <span
+                                  style={{
+                                    background: "#dcfce7",
+                                    color: "#15803d",
+                                    padding: "8px 14px",
+                                    borderRadius: "8px",
+                                    fontWeight: "700",
+                                    marginLeft: "10px",
+                                  }}
+                                >
+                                  ₹{test.test_price}
+                                </span>
+                              )}
                             </h3>
 
                             <div
@@ -475,7 +482,7 @@ export default function PatientReports() {
                         </div>
                       )
                     )}
-                    
+
                   </div>
                 )}
             </div>

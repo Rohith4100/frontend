@@ -82,20 +82,24 @@ export default function Sidebar() {
       },
     ],
 
-    // Physician: [
-    //   {
-    //     label: "Dashboard",
-    //     path: "/physician",
-    //   },
-    //   {
-    //     label: "Test Reports",
-    //     path: "/physician/reports",
-    //   },
-    //   {
-    //     label: "Patient Reports",
-    //     path: "/physician/patient-report"
-    //   }
-    // ],
+    Physician: [
+      {
+        label: "Dashboard",
+        path: "/physician",
+      },
+      {
+        label: "Create Orders",
+        path: "/physician/create-order",
+      },
+      {
+        label: "Test Reports",
+        path: "/physician/reports",
+      },
+      {
+        label: "Patient Reports",
+        path: "/physician/patient-report"
+      }
+    ],
 
     Pathologist: [
       {

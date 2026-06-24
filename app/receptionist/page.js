@@ -197,12 +197,12 @@ export default function ReceptionistDashboard() {
           </h2>
 
           <div className={styles.activityList}>
-            <div className={styles.activityRow}>
-              <span>Patients Registered</span>
+            {/* <div className={styles.activityRow}> */}
+              {/* <span>Patients Registered</span>
               <strong>
                 {todayPatients.length}
-              </strong>
-            </div>
+              </strong> */}
+            {/* </div> */}
 
             <div className={styles.activityRow}>
               <span>Orders Created</span>

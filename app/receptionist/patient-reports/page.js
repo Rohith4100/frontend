@@ -3,7 +3,7 @@ import ProtectedRoute from "../../../components/protectedRoute";
 export default function Page() {
   return (
     <ProtectedRoute role="Receptionist">
-        <PatientReports />;
+        <PatientReports role="Receptionist" />
     </ProtectedRoute>
   
   )

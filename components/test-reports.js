@@ -108,7 +108,7 @@ export default function Reports({ role }) {
         <table className={stylesd.dashboardTable}>
           <thead>
             <tr>
-              <th>Result ID</th>
+              {/* <th>Result ID</th> */}
               <th>Order ID</th>
               <th>Status</th>
               <th>Action</th>
@@ -129,9 +129,9 @@ export default function Reports({ role }) {
               .map(
                 (result) => (
                   <tr key={result.id}>
-                    <td>
+                    {/* <td>
                       {result.id}
-                    </td>
+                    </td> */}
 
                     <td>
                       {

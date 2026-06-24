@@ -60,30 +60,34 @@ export default function TopBar() {
     //   },
     // ],
 
-    // Receptionist: [
-    //   {
-    //     label: "Dashboard",
-    //     path: "/receptionist",
-    //   },
-    //   {
-    //     label: "Patients",
-    //     path: "/receptionist/manage-patients",
-    //   },
-    //   {
-    //     label: "Create Order",
-    //     path: "/receptionist/create-order",
-    //   },
-    //   {
-    //     label: "Patient Reports",
-    //     path: "/receptionist/patient-reports",
-    //   },
-    // ],
+    Receptionist: [
+      {
+        label: "Dashboard",
+        path: "/receptionist",
+      },
+      {
+        label: "Patients",
+        path: "/receptionist/manage-patients",
+      },
+      // {
+      //   label: "Create Order",
+      //   path: "/receptionist/create-order",
+      // },
+      {
+        label: "Patient Reports",
+        path: "/receptionist/patient-reports",
+      },
+    ],
 
     Physician: [
       {
         label: "Dashboard",
         path: "/physician",
       },
+      // {
+      //   label: "Create Orders",
+      //   path: "/physician/create-order",
+      // },
       {
         label: "Test Reports",
         path: "/physician/reports",
@@ -92,6 +96,7 @@ export default function TopBar() {
         label: "Patient Reports",
         path: "/physician/patient-report",
       },
+      
     ],
 
     // Pathologist: [
