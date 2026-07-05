@@ -49,12 +49,16 @@ export default function Sidebar() {
         path: "/admin/test-parameters"
       },
       {
-        label: "Test Report",
-        path: "/admin/reports"
+        label: "Create Order",
+        path: "/admin/create-order",
       },
       {
         label: "Monitor Orders",
         path: "/admin/order"
+      },
+      {
+        label: "Test Report",
+        path: "/admin/reports"
       },
       {
         label: "Patient Reports",
@@ -144,8 +148,8 @@ export default function Sidebar() {
           <Image
             src="/crenuelab.png"
             alt="CrenueLab Logo"
-            width={180}
-            height={80}
+            width={400}
+            height={100}
             priority
             className={styles.logoImage}
           />

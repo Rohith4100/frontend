@@ -161,34 +161,13 @@
   color: #334155;
 }
 
-/* colorful rows */
-/* 1st row of every group of 5 */
-.dashboardTable tbody tr:nth-child(5n + 1) {
+.dashboardTable tbody tr:nth-child(n) {
   background: #f0feff;
 }
 
-/* 2nd row of every group of 5 */
-.dashboardTable tbody tr:nth-child(5n + 2) {
-  background: #eefff5;
-}
-
-/* 3rd row of every group of 5 */
-.dashboardTable tbody tr:nth-child(5n + 3) {
-  background: #ebfff1;
-}
-
-/* 4th row of every group of 5 */
-.dashboardTable tbody tr:nth-child(5n + 4) {
-  background: #f2fffc;
-}
-
-/* 5th row of every group of 5 */
-.dashboardTable tbody tr:nth-child(5n) {
-  background: #f0ffff;
-}
 
 .dashboardTable tbody tr:hover {
-  background: #c8defa;
+  background: #e6f1ec;
   transition: .2s;
 }
 

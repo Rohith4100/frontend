@@ -491,31 +491,6 @@ export default function ManageOrders() {
                   ? "All Tests Added"
                   : "+ Add Test"}
               </button>
-              {/* <select
-                className={styles.select}
-                value={form.test_id}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    test_id:
-                      e.target.value,
-                  })
-                }
-              >
-                <option value="">
-                  Select Test
-                </option>
-
-                {tests.map((test) => (
-                  <option
-                    key={test.id}
-                    value={test.id}
-                  >
-                    {test.test_name}
-                  </option>
-                ))}
-              </select> */}
-
               <select
                 className={styles.select}
                 value={form.priority}

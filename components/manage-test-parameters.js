@@ -319,17 +319,17 @@ export default function ManageTestParameters() {
 
             <div className={styles.form}>
               <select
-                className={styles.select}
-                value={form.test_id}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    test_id:
-                      e.target.value,
-                  })
-                }
-              >
-                <option value="">
+                className={styles.select} 
+                value={form.test_id} 
+                onChange={(e) => 
+                  setForm({ 
+                    ...form, 
+                    test_id: 
+                      e.target.value, 
+                  }) 
+                } 
+              > 
+                <option value=""> 
                   Select Test
                 </option>
 

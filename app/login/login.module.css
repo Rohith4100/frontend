@@ -1,6 +1,6 @@
 .loginPage {
   min-height: 100vh;
-  background: #f0f4f8;
+  background: #e7edf3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,7 +32,7 @@
 }
 
 .loginCard {
-  background: #ffffff;
+  background: #f9f5f5;
   border-radius: 20px;
   box-shadow: 0 8px 40px rgba(18, 52, 90, 0.12);
   padding: 44px 48px 36px;

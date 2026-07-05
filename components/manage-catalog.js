@@ -34,11 +34,11 @@ export default function ManageCatalog() {
     } catch (error) {
       console.error(error);
     }
-  };
+  }; 
 
   const resetForm = () => {
     setEditingId(null);
-
+ 
     setForm({
       test_name: "",
       description: "",

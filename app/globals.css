@@ -5,7 +5,7 @@
 }
 
 body {
-  background: #f4f8fb;
+  background: #f1f5f9;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -15,7 +15,7 @@ body {
 
 .banner {
   width: 100%;
-  background: rgb(242, 243, 245);
+  background: rgb(246, 246, 246);
   border-bottom: 4px solid #2db7c9;
 }
 
